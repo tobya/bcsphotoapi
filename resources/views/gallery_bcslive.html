@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gallery for {[$Demo.Folder_HumanReadable]}</title>
+  <meta property="og:title" content="Demo Photos for {[$Demo.Folder_HumanReadable]} ">
+<meta property="og:description" content="Photos of recipes cooked in demonstration on {[$Demo.Folder_HumanReadable]} at Ballymaloe Cookery School">
+<meta property="og:image" content="{[$Photos.0.basesrc]}?w=100&h=100&fit=crop">
+
+</head>
+<body>
+  <h2>{[$Demo.Folder_HumanReadable]}</h2>
+  <ul>
+    <li> <img src="{[$P.basesrc]}?w=400&h=400&fit=crop"><BR><hr> 
+  </ul>
+      <div class="item-list-wrapper w-dyn-list">
+        <div role="list" class="item-list w-dyn-items w-row">
+
+ 
+  {[foreach from=$Photos item=P]}
+      <div role="listitem" class="item w-dyn-item w-col  w-col-3">
+            <div class="item-block">
+              <a href="" class=" poster-format w-inline-block mobile-half">
+                <div class="item-number">{{$c->fromdate_dayofweek}}</div>
+                <img src="https://bcsdemophotos.imgix.net/2020/12%20Week%20Jan/Week3/Thu%2023rd%20Jan%202020/2020-01-23%2016.45.28.jpg?h=310">
+              </a>
+              <a href="https://watch.ballymaloecookeryschool.online/watch/event/private/{{$c->courseid}}" class="item-block-title"> {{$c->coursename}}</a>
+              <div>{{$c->fromdate_humanreadable}}</div>
+              <div class="info-wrapper small">
+                <div class="info-block">
+                  <img src="/images/tag.svg" alt="" class="info-block-icon small">
+                  <a href="https://watch.ballymaloecookeryschool.online/watch/event/private/{{$c->courseid}}" class="info-title-link">|</a>
+                </div>
+              </div>
+            </div>  
+      </div>
+
+  {[/foreach]}
+
+        </div>
+        <div class="w-dyn-empty">
+          <div>No items found.</div>
+        </div>
+      </div>
+</body>
+</html>
