@@ -35,6 +35,8 @@ $router->get('/images/random/{year}/{month}/{day}', 'photoController@GalleryImag
 $router->get('/gallery/{demodate}', 'photoController@GalleryAlbum');
 $router->get('/gallery/{demodate}/nocache', 'photoController@GalleryAlbum_noCache');
 
+$router->get('/files/all', 'photoController@LoadAllPhotos');
+
 // Return Gallery as basic HTML rather than JSON
 $router->get('/gallery/{demodate}/html/', 'photoController@HTMLGalleryAlbum');
 

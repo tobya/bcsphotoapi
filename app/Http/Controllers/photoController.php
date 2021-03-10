@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,7 @@ class PhotoController extends BaseController
 
   public function AllGalleryInfo_ConvertDBPath(Request $request){
 
-         
+
       $info = $this->LoadGalleries(false);
       if (isset($info['source']['hasDBPaths'])){
         // skip
@@ -33,7 +34,7 @@ class PhotoController extends BaseController
       $count = 0;
       foreach ($info['allitems'] as $key => $Gallery) {
 
-         
+
          if (isset($dbpaths['recipedbpaths'][$key])){
 
          $info['allitems'][$key]['RecipeDBPath'] = $dbpaths['recipedbpaths'][$key]['RecipeDBPath'];
@@ -44,17 +45,17 @@ class PhotoController extends BaseController
          $info['allitems'][$key]['RecipeDB_PathIDs'] = [];
 
          }
-         
-     
-      
+
+
+
       }
       $info['source']['hasDBPaths'] = true;
 
-      
+
       $this->saveGalleries($info);
       }
 
-      // Load Lists 
+      // Load Lists
       $info = $this->AllGalleryInfo_IncludingPathIDs_lookup();
 
       return response()->json($info);
@@ -85,7 +86,7 @@ public function AllGalleryPathURLs(){
         $dbpath = $Gallery['RecipeDBPath'];
         if( $dbpath !== 'None' )    {
           $count++;
-         
+
          if (isset($DBRecipes['dbrecipepathids'][$key] )){
           $pathids = $DBRecipes['dbrecipepathids'][$key] ;
          }  else {
@@ -95,11 +96,11 @@ public function AllGalleryPathURLs(){
 
          foreach ($pathids as  $Path) {
           $DBRecipes['pathtourl'][$Path['pathid']] = $Gallery['Link'];
-          } 
+          }
 
 
          $DBRecipes['dbrecipepathids'][$key] = $pathids;
-         
+
          $GalleryInfo['allitems'][$key]['RecipeDB_PathIDs'] = $pathids;
        } else {
          $GalleryInfo['allitems'][$key]['RecipeDB_PathIDs'] = [];
@@ -107,7 +108,7 @@ public function AllGalleryPathURLs(){
        }
          }
 
-      
+
       }
     $GalleryInfo['remaining'] = $count -200;
       $this->saveDBRecipes($DBRecipes);
@@ -129,10 +130,11 @@ public function AllGalleryPathURLs(){
   }
 
   public function GalleryAlbum(Request $request, $demodate) {
-    $AllGallery = $this->LoadGalleries();
+        $AllGallery = $this->LoadGalleries();
 
-      $DateofDemo = date('Ymd',strtotime($demodate));
-    return $this->LoadGalleryAlbum($AllGallery, $DateofDemo); 
+        $DateofDemo = date('Ymd',strtotime($demodate));
+
+        return $this->LoadGalleryAlbum($AllGallery, $DateofDemo);
   }
 
   public function GalleryAlbum_noCache(Request $request, $demodate){
@@ -142,21 +144,23 @@ public function AllGalleryPathURLs(){
       $AllGallery = $this->LoadGalleries();
       // date may be 'today'
       $DateofDemo = date('Ymd',strtotime($demodate));
-   
-    return $this->LoadGalleryAlbum($AllGallery, $DateofDemo); 
+
+    return $this->LoadGalleryAlbum($AllGallery, $DateofDemo);
   }
 
   private function LoadGalleryAlbum($AllGallery, $DemoDate) {
       $DateofDemo = date('Ymd',strtotime($DemoDate));
     if (isset($AllGallery['allitems'][$DateofDemo])){
       $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
+
       $GalleryInfo['Link'] = 'https://alldemophotos.cookingisfun.ie' . $GalleryInfo['Link'];
       $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
-      return response()->json(array('status'=>200, 'gallery' => $GalleryInfo, 
-                                    'images_count' => count($Photos), 
+      return response()->json(array('status'=>200, 'gallery' => $GalleryInfo,
+                                    'images_count' => count($Photos),
                                     'images' => $Photos ));
 
     } else {
+
       return response()->json(array('status'=>404, 'images' => [], 'images_count' => 0 , 'request_time' => date('c'), 'demodate' => $DateofDemo ));
     }
   }
@@ -170,7 +174,7 @@ public function AllGalleryPathURLs(){
 
     if (isset($AllGallery['allitems'][$DateofDemo])){
       $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
-      
+
       $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
       $HTML = "";
       foreach ($Photos as $key => $P) {
@@ -178,20 +182,20 @@ public function AllGalleryPathURLs(){
         $HTML .= "<div><img src='$P[src]'><BR><span>$P[caption]</span></div>";
       }
 
-      return response($HTML);  
+      return response($HTML);
     } else {
       return response('No Images');
-    }   
+    }
   }
 
   public function PurgeCache(Request $request){
     $FilesToDelete = glob(__DIR__ . "/../../../resources/data/*.*");
     foreach ($FilesToDelete as $key => $F) {
       # code...
-      if ( 
-        stripos( $F , 'donotdelete.txt' ) === false && 
+      if (
+        stripos( $F , 'donotdelete.txt' ) === false &&
         stripos( $F , 'allarchivegallery_dbpathids_json.json' ) === false  &&
-        stripos( $F , 'allarchivegallery_dbpaths_json.json' ) === false  
+        stripos( $F , 'allarchivegallery_dbpaths_json.json' ) === false
         ){
         unlink($F);
       }
@@ -348,7 +352,7 @@ function getGalleryByDate($DemoDate ){
   $AllAlbumInfo = $this->LoadGalleries();
 
   if (isset($AllAlbumInfo['allitems'][$DemoDate])){
-    return $this->getGalleryPhotos($AllAlbumInfo['allitems'][$DemoDate]);    
+    return $this->getGalleryPhotos($AllAlbumInfo['allitems'][$DemoDate]);
   } else {
     return [];
   }
@@ -360,7 +364,7 @@ function getRecentGalleryByDate($DemoDate ){
   if (isset($AllAlbumInfo['allitems'][$DemoDate])){
   //  echo 'found';
   return $this->getGalleryPhotos($AllAlbumInfo['allitems'][$DemoDate]);
-    
+
   } else {
   //  echo 'not found';
     return [];
@@ -376,7 +380,7 @@ function LoadRecentGalleries(){
   if (file_exists($GalleryFilename) && !$this->forceReload){
     $AllAlbumInfo = file_get_contents($GalleryFilename) ;
     //echo 'exists0';
-    
+
   } else {
 
     $AllAlbumInfo =  file_get_contents(DEMOGALLERYHOST . '/info_api_v2.php?infotype=all');
@@ -394,36 +398,36 @@ function LoadRecentGalleries(){
   }
 }
 
-function LoadGalleries(){  
+function LoadGalleries(){
 
   // Load Gallery Cache for today
   $GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
-  
+
   if (file_exists($GalleryFilename) && !$this->forceReload){
-    
-    $AllAlbumInfo = file_get_contents($GalleryFilename) ;    
+
+    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
     $AllGalleries = json_decode($AllAlbumInfo, true);
-    
+
   } else {
 
     $AllAlbumInfo =  file_get_contents(DEMOGALLERYHOST . '/info_api_v2.php?infotype=allyears');
-    
+
     // Add cache marker to json that is written to disk but not to returned.
     $AllGalleries = json_decode($AllAlbumInfo,true);
-    $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];   
+    $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
     $this->saveGalleries($AllGalleries,$GalleryFilename);
-    $AllGalleries['source']['source'] = 'fetch';    
+    $AllGalleries['source']['source'] = 'fetch';
 
   }
-
   if ($AllGalleries == NULL){
-    // AllGalleries will be NULL if the json file on disk is not valid json. 
+    // AllGalleries will be NULL if the json file on disk is not valid json.
     // if so delete the file.
     unlink($GalleryFilename);
     return ['status' => 405, 'message' => 'Error reading cache file from disk'];
   } else {
     return $AllGalleries;
   }
+
 
 }
 
@@ -433,14 +437,19 @@ function SaveGalleries($Data, $GalleryFilename = NULL){
     $GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
   }
 
+  // Ensure directory exists first time.
+  if (!file_exists(__DIR__ .  "/../../../resources/data/")){
+
+    mkdir(__DIR__ .  "/../../../resources/data/");
+  }
    file_put_contents($GalleryFilename, json_encode($Data, JSON_PRETTY_PRINT));
 }
 
 function saveDBPaths($Data){
 
-  
+
     $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpaths_json.json";
-  
+
 
    file_put_contents($Filename, json_encode($Data, JSON_PRETTY_PRINT));
 }
@@ -448,7 +457,7 @@ function saveDBPaths($Data){
 function loadDBPaths() {
 
     $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpaths_json.json";
-  
+
   if (file_exists($Filename)){
    return json_decode( file_get_contents($Filename), true);
   } else {
@@ -459,7 +468,7 @@ function loadDBPaths() {
 
 function loadDBRecipes(){
     $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpathids_json.json";
-  
+
   if (file_exists($Filename)){
    return json_decode( file_get_contents($Filename), true);
   } else {
@@ -469,9 +478,9 @@ function loadDBRecipes(){
 
 function saveDBRecipes($Data){
 
-  
+
     $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpathids_json.json";
-  
+
 
    file_put_contents($Filename, json_encode($Data, JSON_PRETTY_PRINT));
 }
@@ -479,94 +488,85 @@ function saveDBRecipes($Data){
 
 function GetGalleryInfo($GalleryDate ){
    $all = $this->LoadGalleries();
-   
+
    return  $all['allitems'][$GalleryDate];
-  
+
 }
 
-function LoadPhotoGallery($Gallery) {
+function LoadPhotoGallery($Gallery){
+    $AllPhotos = $this->LoadAllPhotos();
+    //dd($AllPhotos);
+    //\/home\/cookingisfunweb\/storedemophotos.cookingisfun.ie\/allimages\/Gallery\/2014\/12 Week Apr\/Week11\/Wed 9th Jul 2014\/2014-07-09 12.39.23.jpg
 
-
-    
-  $GalleryFilename = __DIR__ .  "/../../../resources/data/allimagejson-" . date("Ymd", strtotime($Gallery['DemoDate'])) . '.json';
-  
-  $EmptyGallery['images'][$Gallery['DemoDate']] = array('caption' => 'No Photos Available','url' => 'https://bcsdemophotos.imgix.net/2017/12 Week Apr/Week3/Mon 8th May 2017/2017-05-08 17.10.01.jpg?w=400&h=400' );
-   //$EmptyGallery['images'] = [];
-
-  if (file_exists($GalleryFilename) && !$this->forceReload){
-    $content = file_get_contents($GalleryFilename);
-
-  } else {
-    // Get all album info from zenphoto 
-    //dd($Gallery);
-    $galleryurl =   DEMOGALLERYHOST .  str_replace(' ', '+',  $Gallery['Link'] ). '?notjson';
-   // dd($galleryurl);
-    $jsonAllImagesInfo = file_get_contents($galleryurl);
-
-    //echo DEMOGALLERYHOST . '/' . str_replace(' ', '+',  $Gallery['Link'] ). '?notjson';
-
-
-    // We must remove all html comments from notjson stream.  
-    // It is not json because zenphoto adds html comments to the output.
-    $content = preg_replace( '/<!--(.|\s)*?-->/' , '' , $jsonAllImagesInfo );
-
-    file_put_contents($GalleryFilename, $content);
-  } 
-
-  if (trim($content) == ''){
-    $AllImagesInfo = $EmptyGallery;
-  } else {
-
-    $AllImagesInfo = json_decode($content,true);
-
-    // check if json was decode if not then delete teh file and try again next time.
-    if ($AllImagesInfo == NULL ){
-      // make a copy for debuggin purposes
-      copy($GalleryFilename, $GalleryFilename . '.archive' );
-
-      // remove file that wont parse.
-      unlink($GalleryFilename);
-
+    foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
+        if (stripos($GalleryName,$Gallery['FolderName']) !== false){
+            // If there was ever a scenario when 2 folders could have the same date, you would need to build up array.
+            foreach ($GalleryFiles['images'] as $fn){
+                $Files[] = str_replace('/home/cookingisfunweb/storedemophotos.cookingisfun.ie/allimages/Gallery','',$fn);
+            }
+            $GalleryFiles['images'] = $Files;
+            return $GalleryFiles;
+        }
     }
-  }
-
-  return $AllImagesInfo;
 
 }
 
-function getGalleryPhotos($Gallery){
- 
-  //dd($Gallery);
+function GetGalleryPhotos($Gallery){
+
+
   $GalleryImages =  $this->LoadPhotoGallery($Gallery);
-  
+  //  dd($GalleryImages);
   $i = 0;
   //dd($GalleryImages);
- 
-  foreach ($GalleryImages['images'] as $key => $img) {
+
+  foreach ($GalleryImages['images'] as $filename) {
     # code...
     $i++;
- 
-    // Now using imgix to resize. 
-    $imgurl = 'https://bcsdemophotos.imgix.net' . urldecode($img['ImageLinkURL']) ;
+
+
+    // Now using imgix to resize.
+    $imgurl = 'https://bcsdemophotos.imgix.net' . $filename ;
     $imgurlsized = $imgurl . '?w=600';
-    $CaptionBreakdown = $this->getGalleryCaption( $img['tags']);
-    $imgs[] = array('caption'=> $CaptionBreakdown['caption'] , 'src' => $imgurlsized, 'basesrc' => $imgurl, 
-                                                          'photolink' => $img['link'], 'tags' => $img['tags'], 'recipeversionid' => $CaptionBreakdown['id'] );// , 'debug' => [] );//$GalleryImages );
-    
+    $link = DEMOGALLERYHOST . $filename;
+    //$CaptionBreakdown = $this->getGalleryCaption( $img['tags']);
+    $imgs[] = array('caption'=> '' , 'src' => $imgurlsized, 'basesrc' => $imgurl,
+                                                          'photolink' => $link, 'tags' => '', 'recipeversionid' => '' );// , 'debug' => [] );//$GalleryImages );
+
   }
-  
+   // dd($imgs);
   return $imgs;
 }
+
+function LoadAllPhotos(){
+       $PhotosFilename = __DIR__ .  "/../../../resources/data/allimages.json";
+   if (file_exists($PhotosFilename) && !$this->forceReload){
+    $json = file_get_contents($PhotosFilename);
+
+  } else {
+https://alldemophotos.cookingisfun.ie/info_api_v2.php?infotype=files
+    $galleryurl =   DEMOGALLERYHOST .  '/info_api_v2.php?infotype=files';
+
+    $json = file_get_contents($galleryurl);
+
+
+    file_put_contents($PhotosFilename, $json);
+  }
+  return json_decode( $json,true);
+}
+
+
+
+
 
 // Tags are stored alphabetically so need to find non RID tag
 function getGalleryCaption($tags) {
   $tagarray = explode(';', $tags);
-  
+
   $TagBreakdown = ['id' => -1, 'caption'=> ''];
-  
+
   foreach ($tagarray as $tag) {
     if (strpos($tag, 'RID') !== false){
-      $TagBreakdown['id'] = $tag;      
+      $TagBreakdown['id'] = $tag;
     } else {
       $TagBreakdown['caption'] = str_replace('-', ' ', $tag);
 
@@ -618,32 +618,32 @@ function getrecipeDBListPaths($info){
 
       if ($dbpaths == []) {
         $dbpaths['pathtourl'] = [];
-        
+
       foreach ($info['allitems'] as $key => $Gallery) {
 
-          
+
          $dbpath = $this->getRecipeDBListPathFromZenPath($Gallery['Link']);
-       
+
          $dbpaths['recipedbpaths'][$key]['RecipeDBPath'] = $dbpath;
          $dbpaths['recipedbpaths'][$key]['RecipeDB_PathIDs'] = [];
-     
-      
+
+
       }
       $info['source']['hasDBPaths'] = true;
 
       $this->saveDBPaths($dbpaths);
-      
+
       }
 
-      
+
 
 
       return $dbpaths;
-      
+
 }
 
 function getRecipeDBListPathFromZenPath($ZenLink){
-    
+
     $ZenLink =    trim($ZenLink, '/');
     @list($Year,$Course,$Week,$Date,$tmp) = explode('/', $ZenLink);
 
@@ -678,7 +678,7 @@ function getRecipeDBListPathFromZenPath($ZenLink){
 
     foreach ($Details['paths'] as $key => $P) {
       $paths[] = ['pathid' => $P['PathID'], 'path' => $P['Path']];
-   
+
     }
     }
     return $paths;
@@ -710,5 +710,5 @@ function getRecipeDBListPathFromZenPath($ZenLink){
 
     return $WeekNo;
   }
- 
+
 }
