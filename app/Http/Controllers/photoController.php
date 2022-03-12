@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 
-Define('DEMOGALLERYHOST', 'https://alldemophotos.cookingisfun.ie');
+
 
 class PhotoController extends Controller
 {
@@ -153,7 +153,7 @@ public function AllGalleryPathURLs(){
     if (isset($AllGallery['allitems'][$DateofDemo])){
       $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
 
-      $GalleryInfo['Link'] = 'https://alldemophotos.cookingisfun.ie' . $GalleryInfo['Link'];
+      $GalleryInfo['Link'] = config('services.demophotos.host') . $GalleryInfo['Link'];
       $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
       return response()->json(array('status'=>200, 'gallery' => $GalleryInfo,
                                     'images_count' => count($Photos),
@@ -383,7 +383,7 @@ function LoadRecentGalleries(){
 
   } else {
 
-    $AllAlbumInfo =  file_get_contents(DEMOGALLERYHOST . '/info_api_v2.php?infotype=all');
+    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=all');
     file_put_contents($GalleryFilename, $AllAlbumInfo);
   }
 
@@ -410,7 +410,8 @@ function LoadGalleries(){
 
   } else {
 
-    $AllAlbumInfo =  file_get_contents(DEMOGALLERYHOST . '/info_api_v2.php?infotype=allyears');
+     // die(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
+    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
 
     // Add cache marker to json that is written to disk but not to returned.
     $AllGalleries = json_decode($AllAlbumInfo,true);
@@ -527,7 +528,7 @@ function GetGalleryPhotos($Gallery){
     // Now using imgix to resize.
     $imgurl = 'https://bcsdemophotos.imgix.net' . $filename ;
     $imgurlsized = $imgurl . '?w=600';
-    $link = DEMOGALLERYHOST . $filename;
+    $link = config('services.demophotos.host') . $filename;
     //$CaptionBreakdown = $this->getGalleryCaption( $img['tags']);
     $imgs[] = array('caption'=> '' , 'src' => $imgurlsized, 'basesrc' => $imgurl,
                                                           'photolink' => $link, 'tags' => '', 'recipeversionid' => '' );// , 'debug' => [] );//$GalleryImages );
@@ -544,7 +545,7 @@ function LoadAllPhotos(){
 
   } else {
 //https://alldemophotos.cookingisfun.ie/info_api_v2.php?infotype=files
-    $galleryurl =   DEMOGALLERYHOST .  '/info_api_v2.php?infotype=files';
+    $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=files';
 
     $json = file_get_contents($galleryurl);
 
