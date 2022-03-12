@@ -16,7 +16,6 @@ class PhotoController extends Controller
 
   public function AllPhotoInfo(Request $request){
       $info = $this->LoadGalleries(false);
-
       return response()->json($info);
   }
 
@@ -189,7 +188,8 @@ public function AllGalleryPathURLs(){
   }
 
   public function PurgeCache(Request $request){
-    $FilesToDelete = glob(__DIR__ . "/../../../resources/data/*.*");
+    //$FilesToDelete = glob(__DIR__ . "/../../../resources/data/*.*");
+    $FilesToDelete = glob(  storage_path('/app/data/*.*'));
     foreach ($FilesToDelete as $key => $F) {
       # code...
       if (
@@ -200,7 +200,8 @@ public function AllGalleryPathURLs(){
         unlink($F);
       }
     }
-    $FilesAfter = glob(__DIR__ . "/../../../resources/data/*.*");
+  //  $FilesAfter = glob(__DIR__ . "/../../../resources/data/*.*");
+    $FilesAfter = glob(  storage_path('/app/data/*.*'));
     return response()->json(['filestopurge' => $FilesToDelete, 'filesremain' => $FilesAfter, 'status' => 200]);
   }
 
@@ -265,8 +266,7 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
       $Month = "0" . intval($Month);
   }
   foreach ($AllGalleries['allitems'] as $key => $G) {
-    //echo ':' ,substr($G['DemoDate'],0,4), '-', $G['DemoDate'];
-    //echo "substr($G[DemoDate],0,6) == $Year.$Month \n<BR>";
+
     if ( substr($G['DemoDate'],0,6) == $Year.$Month){
       $GalleryArray[] = $G;
     }
@@ -375,7 +375,8 @@ function getRecentGalleryByDate($DemoDate ){
 function LoadRecentGalleries(){
 
   //Load Gallery for today
-  $GalleryFilename = __DIR__ .  "/../../../resources/data/recentgalleryjson-" . date("Ymd") . '.json';
+ // $GalleryFilename = __DIR__ .  "/../../../resources/data/recentgalleryjson-" . date("Ymd") . '.json';
+  $GalleryFilename =  storage_path('/app/data/recentgalleryjson-' . date("Ymd") . '.json');
   //echo "./data/allgalleryjson-" . date("Ymd") . '.json';
   if (file_exists($GalleryFilename) && !$this->forceReload){
     $AllAlbumInfo = file_get_contents($GalleryFilename) ;
@@ -401,7 +402,8 @@ function LoadRecentGalleries(){
 function LoadGalleries(){
 
   // Load Gallery Cache for today
-  $GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
+  //$GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
+  $GalleryFilename =   storage_path('/app/data/allarchivegalleryjson_'  . date('Ymd')  .".json");
 
   if (file_exists($GalleryFilename) && !$this->forceReload){
 
@@ -435,13 +437,14 @@ function LoadGalleries(){
 function SaveGalleries($Data, $GalleryFilename = NULL){
 
   if ($GalleryFilename == null){
-    $GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
+    //$GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
+    $GalleryFilename =   storage_path('/app/data/allarchivegalleryjson_'  . date('Ymd')  .".json");
   }
 
   // Ensure directory exists first time.
-  if (!file_exists(__DIR__ .  "/../../../resources/data/")){
+  if (!file_exists(  storage_path('/app/data/'))){
 
-    mkdir(__DIR__ .  "/../../../resources/data/");
+    mkdir(storage_path('/app/data/'));
   }
    file_put_contents($GalleryFilename, json_encode($Data, JSON_PRETTY_PRINT));
 }
@@ -449,7 +452,7 @@ function SaveGalleries($Data, $GalleryFilename = NULL){
 function saveDBPaths($Data){
 
 
-    $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpaths_json.json";
+    $Filename = storage_path('/app/data/allarchivegallery_dbpaths_json.json');
 
 
    file_put_contents($Filename, json_encode($Data, JSON_PRETTY_PRINT));
@@ -457,7 +460,7 @@ function saveDBPaths($Data){
 
 function loadDBPaths() {
 
-    $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpaths_json.json";
+    $Filename =storage_path('/app/data/allarchivegallery_dbpaths_json.json');
 
   if (file_exists($Filename)){
    return json_decode( file_get_contents($Filename), true);
@@ -468,7 +471,7 @@ function loadDBPaths() {
 
 
 function loadDBRecipes(){
-    $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpathids_json.json";
+    $Filename =storage_path('/app/data/allarchivegallery_dbpathids_json.json');
 
   if (file_exists($Filename)){
    return json_decode( file_get_contents($Filename), true);
@@ -480,7 +483,7 @@ function loadDBRecipes(){
 function saveDBRecipes($Data){
 
 
-    $Filename =__DIR__ .  "/../../../resources/data/allarchivegallery_dbpathids_json.json";
+    $Filename =storage_path('/app/data/allarchivegallery_dbpathids_json.json');
 
 
    file_put_contents($Filename, json_encode($Data, JSON_PRETTY_PRINT));
@@ -539,7 +542,7 @@ function GetGalleryPhotos($Gallery){
 }
 
 function LoadAllPhotos(){
-       $PhotosFilename = __DIR__ .  "/../../../resources/data/allimages.json";
+       $PhotosFilename =storage_path('/app/data/allimages.json');
    if (file_exists($PhotosFilename) && !$this->forceReload){
     $json = file_get_contents($PhotosFilename);
 
