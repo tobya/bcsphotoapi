@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Storage;
-use Laravel\Lumen\Routing\Controller as BaseController;
+
 use Illuminate\Http\Request;
 
 Define('DEMOGALLERYHOST', 'https://alldemophotos.cookingisfun.ie');
 
-class PhotoController extends BaseController
+class PhotoController extends Controller
 {
     //
 

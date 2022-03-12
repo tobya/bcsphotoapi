@@ -1,18 +1,16 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
 
 use Smarty;
 
-use Laravel\Lumen\Routing\Controller as BaseController;
-
 use Illuminate\Http\Request;
 
 include 'photoController.php';
 
 
-class TemplateController extends BaseController
+class TemplateController extends Controller
 {
 
   private $smarty;
@@ -25,14 +23,14 @@ class TemplateController extends BaseController
   $smarty->setCacheDir('../storage/smarty/cache/');
   $smarty->left_delimiter = '{[';
   $smarty->right_delimiter = ']}';
-  
+
   $smarty->error_reporting = E_ALL & ~E_NOTICE;
-  
+
    $this->smarty = $smarty;
    }
 
 public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
-    
+
     $PhotoGallery = new PhotoController();
     $this->setupSmarty();
     $AllGallery = $PhotoGallery->LoadGalleries();
@@ -42,7 +40,7 @@ public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
 
     if (isset($AllGallery['allitems'][$DateofDemo])){
       $GalleryInfo = $PhotoGallery->GetGalleryInfo($DateofDemo);
-      
+
       $Photos = $PhotoGallery->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
       $HTML = "";
 
@@ -55,14 +53,14 @@ public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
         $HTML =  $this->smarty->fetch("gallery_$template" . '.html');
         return response($HTML);
       } else {
-        return response('no template');  
+        return response('no template');
       }
-    
+
     } else {
       return response('No Images');
-    }   
+    }
   }
 
-   
+
 
 }
