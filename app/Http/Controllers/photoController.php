@@ -543,7 +543,7 @@ function LoadAllPhotos(){
     $json = file_get_contents($PhotosFilename);
 
   } else {
-https://alldemophotos.cookingisfun.ie/info_api_v2.php?infotype=files
+//https://alldemophotos.cookingisfun.ie/info_api_v2.php?infotype=files
     $galleryurl =   DEMOGALLERYHOST .  '/info_api_v2.php?infotype=files';
 
     $json = file_get_contents($galleryurl);
