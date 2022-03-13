@@ -513,16 +513,24 @@ function GetGalleryInfo($GalleryDate ){
 
 }
 
+    /**
+     * Get All details for Gallery including images.
+     * @param $Gallery
+     * @return mixed|void
+     */
 function LoadPhotoGallery($Gallery){
-    $AllPhotos = $this->LoadAllPhotos();
-    //dd($AllPhotos);
-    //\/home\/cookingisfunweb\/storedemophotos.cookingisfun.ie\/allimages\/Gallery\/2014\/12 Week Apr\/Week11\/Wed 9th Jul 2014\/2014-07-09 12.39.23.jpg
+
+    $AllPhotos = $this->LoadAllPhotos(date('Y',$Gallery['DTFolder']));
 
     foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
         if (stripos($GalleryName,$Gallery['FolderName']) !== false){
             // If there was ever a scenario when 2 folders could have the same date, you would need to build up array.
             foreach ($GalleryFiles['images'] as $fn){
-                $Files[] = str_replace('/home/cookingisfunweb/storedemophotos.cookingisfun.ie/allimages/Gallery','',$fn);
+                if ($AllPhotos['path_clean']){
+                   $Files[] = $fn;
+                } else {
+                    $Files[] = str_replace($AllPhotos['root_path'],'',$fn);
+                }
             }
             $GalleryFiles['images'] = $Files;
             return $GalleryFiles;
@@ -531,6 +539,11 @@ function LoadPhotoGallery($Gallery){
 
 }
 
+    /**
+     * Return all Images for a Gallery
+     * @param $Gallery
+     * @return array
+     */
 function GetGalleryPhotos($Gallery){
 
 
@@ -623,6 +636,7 @@ function getDatesBetween($fromDate, $toDate) {
   $dateMonthYearArr = array();
   $fromDateSTR = strtotime($fromDate);
   $toDateSTR = strtotime($toDate);
+
   for ($currentDateSTR = $fromDateSTR; $currentDateSTR <= $toDateSTR; $currentDateSTR += (60 * 60 * 24)) {
     // use date() and $currentDateSTR to format the dates in between
     $currentDateStr = date("Ymd", $currentDateSTR);
