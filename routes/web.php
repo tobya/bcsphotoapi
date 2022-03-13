@@ -21,7 +21,10 @@ Route::get('/', function () {
 
 
 Route::Get('/', function () use ($router) {
-    return app()->version();
+    return Response()->json( [ 'version' => ['laravel' => app()->version(),
+                                             'app' => config('app.version')],
+                                'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos'
+                                            ]);
 });
 
 /*
