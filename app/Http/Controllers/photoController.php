@@ -147,23 +147,39 @@ public function AllGalleryPathURLs(){
     return $this->LoadGalleryAlbum($AllGallery, $DateofDemo);
   }
 
+    /**
+     * Return json list with details of Gallery and all images .
+     * @param $AllGallery
+     * @param $DemoDate
+     * @return \Illuminate\Http\JsonResponse
+     */
   private function LoadGalleryAlbum($AllGallery, $DemoDate) {
-      $DateofDemo = date('Ymd',strtotime($DemoDate));
+
+    $DateofDemo = date('Ymd',strtotime($DemoDate));
     if (isset($AllGallery['allitems'][$DateofDemo])){
       $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
 
       $GalleryInfo['Link'] = config('services.demophotos.host') . $GalleryInfo['Link'];
       $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
-      return response()->json(array('status'=>200, 'gallery' => $GalleryInfo,
+      return response()->json(array('status'=>200,
+                                    'api' => ['version' => config('app.version')],
+                                    'gallery' => $GalleryInfo,
                                     'images_count' => count($Photos),
                                     'images' => $Photos ));
-
     } else {
-
-      return response()->json(array('status'=>404, 'images' => [], 'images_count' => 0 , 'request_time' => date('c'), 'demodate' => $DateofDemo ));
+      return response()->json(array(
+                    'status'=>404, 'images' => [],
+                    'images_count' => 0 , 'request_time' => date('c'),
+                    'demodate' => $DateofDemo ));
     }
   }
 
+    /**
+     * Return basic html page of images for gallery
+     * @param Request $request
+     * @param $demodate
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
   public function HTMLGalleryAlbum(Request $request, $demodate){
      $AllGallery = $this->LoadGalleries();
 
@@ -414,7 +430,7 @@ function LoadGalleries(){
 
      // die(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
     $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
-
+   // die($AllAlbumInfo);
     // Add cache marker to json that is written to disk but not to returned.
     $AllGalleries = json_decode($AllAlbumInfo,true);
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
@@ -519,25 +535,21 @@ function GetGalleryPhotos($Gallery){
 
 
   $GalleryImages =  $this->LoadPhotoGallery($Gallery);
-  //  dd($GalleryImages);
   $i = 0;
-  //dd($GalleryImages);
 
   foreach ($GalleryImages['images'] as $filename) {
-    # code...
     $i++;
-
 
     // Now using imgix to resize.
     $imgurl = 'https://bcsdemophotos.imgix.net' . $filename ;
     $imgurlsized = $imgurl . '?w=600';
     $link = config('services.demophotos.host') . $filename;
-    //$CaptionBreakdown = $this->getGalleryCaption( $img['tags']);
-    $imgs[] = array('caption'=> '' , 'src' => $imgurlsized, 'basesrc' => $imgurl,
-                                                          'photolink' => $link, 'tags' => '', 'recipeversionid' => '' );// , 'debug' => [] );//$GalleryImages );
 
+    $imgs[] = array('caption'=> '' , 'src' => $imgurlsized,
+                    'basesrc' => $imgurl,  'photolink' => $link,
+                    'tags' => '', 'recipeversionid' => '' );
   }
-   // dd($imgs);
+
   return $imgs;
 }
 
@@ -556,17 +568,17 @@ function LoadAllPhotos($year = null){
 
     $json = file_get_contents($galleryurl);
 
-
     file_put_contents($PhotosFilename, $json);
   }
   return json_decode( $json,true);
 }
 
 
-
-
-
-// Tags are stored alphabetically so need to find non RID tag
+    /**
+     * Tags are stored alphabetically so need to find non RID tag
+     * @param $tags
+     * @return array
+     */
 function getGalleryCaption($tags) {
   $tagarray = explode(';', $tags);
 
@@ -600,15 +612,17 @@ function DownloadGalleries($Galleries, $StartDate, $EndDate){
 
 }
 
-/**********Function Description******************
-Basically returns an array or arrays listing all days between two dates.
- */
+    /**
+     * Basically returns an array or arrays listing all days between two dates.
+     * @param $fromDate
+     * @param $toDate
+     * @return array
+     */
 function getDatesBetween($fromDate, $toDate) {
 
   $dateMonthYearArr = array();
   $fromDateSTR = strtotime($fromDate);
   $toDateSTR = strtotime($toDate);
-  // echo date('Ymd',$fromDateSTR);
   for ($currentDateSTR = $fromDateSTR; $currentDateSTR <= $toDateSTR; $currentDateSTR += (60 * 60 * 24)) {
     // use date() and $currentDateSTR to format the dates in between
     $currentDateStr = date("Ymd", $currentDateSTR);
@@ -627,27 +641,17 @@ function getrecipeDBListPaths($info){
       if ($dbpaths == []) {
         $dbpaths['pathtourl'] = [];
 
-      foreach ($info['allitems'] as $key => $Gallery) {
+          foreach ($info['allitems'] as $key => $Gallery) {
+             $dbpath = $this->getRecipeDBListPathFromZenPath($Gallery['Link']);
+             $dbpaths['recipedbpaths'][$key]['RecipeDBPath'] = $dbpath;
+             $dbpaths['recipedbpaths'][$key]['RecipeDB_PathIDs'] = [];
+          }
+          $info['source']['hasDBPaths'] = true;
 
-
-         $dbpath = $this->getRecipeDBListPathFromZenPath($Gallery['Link']);
-
-         $dbpaths['recipedbpaths'][$key]['RecipeDBPath'] = $dbpath;
-         $dbpaths['recipedbpaths'][$key]['RecipeDB_PathIDs'] = [];
-
-
-      }
-      $info['source']['hasDBPaths'] = true;
-
-      $this->saveDBPaths($dbpaths);
+          $this->saveDBPaths($dbpaths);
 
       }
-
-
-
-
       return $dbpaths;
-
 }
 
 function getRecipeDBListPathFromZenPath($ZenLink){
