@@ -182,10 +182,7 @@ public function AllGalleryPathURLs(){
      */
   public function HTMLGalleryAlbum(Request $request, $demodate){
      $AllGallery = $this->LoadGalleries();
-
-      $DateofDemo = date('Ymd',strtotime($demodate));
-
-
+     $DateofDemo = date('Ymd',strtotime($demodate));
 
     if (isset($AllGallery['allitems'][$DateofDemo])){
       $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
@@ -193,7 +190,7 @@ public function AllGalleryPathURLs(){
       $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
       $HTML = "";
       foreach ($Photos as $key => $P) {
-        # code...
+
         $HTML .= "<div><img src='$P[src]'><BR><span>$P[caption]</span></div>";
       }
 
@@ -204,7 +201,7 @@ public function AllGalleryPathURLs(){
   }
 
   public function PurgeCache(Request $request){
-    //$FilesToDelete = glob(__DIR__ . "/../../../resources/data/*.*");
+
     $FilesToDelete = glob(  storage_path('/app/data/' . config('services.demophotos.marker') . '/*.*'));
     foreach ($FilesToDelete as $key => $F) {
       # code...
@@ -216,7 +213,7 @@ public function AllGalleryPathURLs(){
         unlink($F);
       }
     }
-  //  $FilesAfter = glob(__DIR__ . "/../../../resources/data/*.*");
+
     $FilesAfter = glob(  storage_path('/app/data/' . config('services.demophotos.marker') . '/*.*'));
     return response()->json(['filestopurge' => $FilesToDelete, 'filesremain' => $FilesAfter, 'status' => 200]);
   }
@@ -244,7 +241,6 @@ public function GalleryImageRandomYear(Request $request, $Year){
 
 
   foreach ($AllGalleries['allitems'] as $key => $G) {
-    //echo ':' ,substr($G['DemoDate'],0,4), '-', $G['DemoDate'];
     if ( substr($G['DemoDate'],0,4) == $Year){
       $GalleryArray[] = $G;
     }
@@ -321,8 +317,6 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
     }
 
   foreach ($AllGalleries['allitems'] as $key => $G) {
-    //echo ':' ,substr($G['DemoDate'],0,4), '-', $G['DemoDate'];
-
     if ( $G['DemoDate'] == $Year.$Month.$Day){
       $GalleryArray[] = $G;
     }
@@ -352,7 +346,6 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
 
 
-
 function GetRecentGalleryInfo(){
   $AllAlbumInfo = $this->LoadRecentGalleries();
   return $AllAlbumInfo;
@@ -376,13 +369,10 @@ function getGalleryByDate($DemoDate ){
 
 function getRecentGalleryByDate($DemoDate ){
   $AllAlbumInfo = $this->GetRecentGalleryInfo();
-//  print_r($AllAlbumInfo);
-  if (isset($AllAlbumInfo['allitems'][$DemoDate])){
-  //  echo 'found';
-  return $this->getGalleryPhotos($AllAlbumInfo['allitems'][$DemoDate]);
 
+  if (isset($AllAlbumInfo['allitems'][$DemoDate])){
+    return $this->getGalleryPhotos($AllAlbumInfo['allitems'][$DemoDate]);
   } else {
-  //  echo 'not found';
     return [];
   }
   }
@@ -391,21 +381,15 @@ function getRecentGalleryByDate($DemoDate ){
 function LoadRecentGalleries(){
 
   //Load Gallery for today
- // $GalleryFilename = __DIR__ .  "/../../../resources/data/recentgalleryjson-" . date("Ymd") . '.json';
   $GalleryFilename =  storage_path('/app/data/' . config('services.demophotos.marker') . '/recentgalleryjson-' . date("Ymd") . '.json');
-  //echo "./data/allgalleryjson-" . date("Ymd") . '.json';
+
   if (file_exists($GalleryFilename) && !$this->forceReload){
     $AllAlbumInfo = file_get_contents($GalleryFilename) ;
-    //echo 'exists0';
-
   } else {
-
     $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=all');
     file_put_contents($GalleryFilename, $AllAlbumInfo);
   }
 
-  //echo $AllAlbumInfo;
- // print_r(json_decode($AllAlbumInfo, true));
   $AllGalleries = json_decode($AllAlbumInfo, true);
   if ($AllGalleries == NULL){
     unlink($GalleryFilename);
@@ -418,7 +402,6 @@ function LoadRecentGalleries(){
 function LoadGalleries(){
 
   // Load Gallery Cache for today
-  //$GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
   $GalleryFilename =   storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
 
   if (file_exists($GalleryFilename) && !$this->forceReload){
@@ -428,9 +411,8 @@ function LoadGalleries(){
 
   } else {
 
-     // die(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
     $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
-   // die($AllAlbumInfo);
+
     // Add cache marker to json that is written to disk but not to returned.
     $AllGalleries = json_decode($AllAlbumInfo,true);
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
@@ -453,13 +435,11 @@ function LoadGalleries(){
 function SaveGalleries($Data, $GalleryFilename = NULL){
 
   if ($GalleryFilename == null){
-    //$GalleryFilename =__DIR__ .  "/../../../resources/data/allarchivegalleryjson_"  . date('Ymd')  .".json";
     $GalleryFilename =   storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
   }
 
   // Ensure directory exists first time.
   if (!file_exists(  storage_path('/app/data/' . config('services.demophotos.marker') . '/'))){
-
     mkdir(storage_path('/app/data/' . config('services.demophotos.marker') . '/'));
   }
    file_put_contents($GalleryFilename, json_encode($Data, JSON_PRETTY_PRINT));
