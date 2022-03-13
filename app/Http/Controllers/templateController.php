@@ -32,7 +32,7 @@ class TemplateController extends Controller
 public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
 
     $PhotoGallery = new PhotoController();
-    $this->setupSmarty();
+    //$this->setupSmarty();
     $AllGallery = $PhotoGallery->LoadGalleries();
 
     $DateofDemo = date('Ymd',strtotime($demodate));
@@ -44,13 +44,16 @@ public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
       $Photos = $PhotoGallery->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
       $HTML = "";
 
-      $this->smarty->assign('Photos', $Photos);
-      $this->smarty->assign('Demo', $GalleryInfo);
+    //  $this->smarty->assign('Photos', $Photos);
+    //  $this->smarty->assign('Demo', $GalleryInfo);
      // $this->smarty->assign('Debug', print_r($GalleryInfo,true));
 
-
+        return view('gallery.' . $template,[
+            'Photos' => json_decode(json_encode($Photos)),
+            'Demo' => (object) $GalleryInfo,
+        ]);
       if (file_exists('../resources/views/gallery_' . $template . '.html')){
-        $HTML =  $this->smarty->fetch("gallery_$template" . '.html');
+       // $HTML =  $this->smarty->fetch("gallery_$template" . '.html');
         return response($HTML);
       } else {
         return response('no template');
