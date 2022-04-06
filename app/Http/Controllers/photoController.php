@@ -202,7 +202,7 @@ public function AllGalleryPathURLs(){
 
   public function PurgeCache(Request $request){
 
-    $FilesToDelete = glob(  storage_path('/app/data/' . config('services.demophotos.marker') . '/*.*'));
+    $FilesToDelete = glob(  storage_path('app/data/' . config('services.demophotos.marker') . '/*.*'));
     foreach ($FilesToDelete as $key => $F) {
       # code...
       if (
@@ -214,7 +214,7 @@ public function AllGalleryPathURLs(){
       }
     }
 
-    $FilesAfter = glob(  storage_path('/app/data/' . config('services.demophotos.marker') . '/*.*'));
+    $FilesAfter = glob(  storage_path('app/data/' . config('services.demophotos.marker') . '/*.*'));
     return response()->json(['filestopurge' => $FilesToDelete, 'filesremain' => $FilesAfter, 'status' => 200]);
   }
 
@@ -381,7 +381,7 @@ function getRecentGalleryByDate($DemoDate ){
 function LoadRecentGalleries(){
 
   //Load Gallery for today
-  $GalleryFilename =  storage_path('/app/data/' . config('services.demophotos.marker') . '/recentgalleryjson-' . date("Ymd") . '.json');
+  $GalleryFilename =  storage_path('app/data/' . config('services.demophotos.marker') . '/recentgalleryjson-' . date("Ymd") . '.json');
 
   if (file_exists($GalleryFilename) && !$this->forceReload){
     $AllAlbumInfo = file_get_contents($GalleryFilename) ;
@@ -402,7 +402,7 @@ function LoadRecentGalleries(){
 function LoadGalleries(){
 
   // Load Gallery Cache for today
-  $GalleryFilename =   storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
+  $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
 
   if (file_exists($GalleryFilename) && !$this->forceReload){
 
@@ -448,7 +448,7 @@ function SaveGalleries($Data, $GalleryFilename = NULL){
 function saveDBPaths($Data){
 
 
-    $Filename = storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpaths_json.json');
+    $Filename = storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpaths_json.json');
 
 
    file_put_contents($Filename, json_encode($Data, JSON_PRETTY_PRINT));
@@ -456,7 +456,7 @@ function saveDBPaths($Data){
 
 function loadDBPaths() {
 
-    $Filename =storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpaths_json.json');
+    $Filename =storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpaths_json.json');
 
   if (file_exists($Filename)){
    return json_decode( file_get_contents($Filename), true);
@@ -467,7 +467,7 @@ function loadDBPaths() {
 
 
 function loadDBRecipes(){
-    $Filename =storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpathids_json.json');
+    $Filename =storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpathids_json.json');
 
   if (file_exists($Filename)){
    return json_decode( file_get_contents($Filename), true);
@@ -479,7 +479,7 @@ function loadDBRecipes(){
 function saveDBRecipes($Data){
 
 
-    $Filename =storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpathids_json.json');
+    $Filename =storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegallery_dbpathids_json.json');
 
 
    file_put_contents($Filename, json_encode($Data, JSON_PRETTY_PRINT));
@@ -548,7 +548,7 @@ function GetGalleryPhotos($Gallery){
 
 function LoadAllPhotos($year = null){
 
-    $PhotosFilename =storage_path('/app/data/' . config('services.demophotos.marker') . '/allimages'.$year.'.json');
+    $PhotosFilename =storage_path('app/data/' . config('services.demophotos.marker') . '/allimages'.$year.'.json');
    if (file_exists($PhotosFilename) && !$this->forceReload){
     $json = file_get_contents($PhotosFilename);
 
