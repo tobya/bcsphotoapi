@@ -515,9 +515,10 @@ function GetGalleryPhotos($Gallery){
 
 
   $GalleryImages =  $this->LoadPhotoGallery($Gallery);
-  //  dd($GalleryImages);
+  
   $i = 0;
-  //dd($GalleryImages);
+  //print_r($GalleryImages['images']);
+ // exit();
 
   foreach ($GalleryImages['images'] as $filename) {
     # code...
