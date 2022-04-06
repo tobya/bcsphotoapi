@@ -28,13 +28,12 @@ public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
 
       $Photos = $PhotoGallery->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
 
+      if (file_exists('../resources/views/gallery/' . $template . '.blade.php')){
         return view('gallery.' . $template,[
             'Photos' => json_decode(json_encode($Photos)),
             'Demo' => (object) $GalleryInfo,
         ]);
-      if (file_exists('../resources/views/gallery_' . $template . '.html')){
-       // $HTML =  $this->smarty->fetch("gallery_$template" . '.html');
-        return response($HTML);
+       
       } else {
         return response('no template');
       }
