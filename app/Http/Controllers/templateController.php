@@ -13,26 +13,11 @@ include 'photoController.php';
 class TemplateController extends Controller
 {
 
-  private $smarty;
-
-   protected function setupSmarty()
-   {
-    $smarty = new Smarty();
-  $smarty->setTemplateDir('../resources/views');
-  $smarty->setCompileDir('../storage/smarty/compile');
-  $smarty->setCacheDir('../storage/smarty/cache/');
-  $smarty->left_delimiter = '{[';
-  $smarty->right_delimiter = ']}';
-
-  $smarty->error_reporting = E_ALL & ~E_NOTICE;
-
-   $this->smarty = $smarty;
-   }
 
 public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
 
     $PhotoGallery = new PhotoController();
-    //$this->setupSmarty();
+    
     $AllGallery = $PhotoGallery->LoadGalleries();
 
     $DateofDemo = date('Ymd',strtotime($demodate));
@@ -42,11 +27,6 @@ public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
       $GalleryInfo = $PhotoGallery->GetGalleryInfo($DateofDemo);
 
       $Photos = $PhotoGallery->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
-      $HTML = "";
-
-    //  $this->smarty->assign('Photos', $Photos);
-    //  $this->smarty->assign('Demo', $GalleryInfo);
-     // $this->smarty->assign('Debug', print_r($GalleryInfo,true));
 
         return view('gallery.' . $template,[
             'Photos' => json_decode(json_encode($Photos)),
