@@ -435,12 +435,13 @@ function LoadGalleries(){
 function SaveGalleries($Data, $GalleryFilename = NULL){
 
   if ($GalleryFilename == null){
-    $GalleryFilename =   storage_path('/app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
+    $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
   }
 
   // Ensure directory exists first time.
-  if (!file_exists(  storage_path('/app/data/' . config('services.demophotos.marker') . '/'))){
-    mkdir(storage_path('/app/data/' . config('services.demophotos.marker') . '/'));
+  if (!file_exists(  storage_path('app/data/' . config('services.demophotos.marker') . '/'))){
+
+    mkdir(storage_path('app/data/' . config('services.demophotos.marker') . '/'),0777,true);
   }
    file_put_contents($GalleryFilename, json_encode($Data, JSON_PRETTY_PRINT));
 }
