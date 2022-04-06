@@ -15,11 +15,8 @@ return [
     */
 
     'demophotos' => [
-      //'host' => 'https://alldemophotos.cookingisfun.ie',
-       // 'marker' => 'alldemophotos',
           'host' => env('PHOTOSTORE_HOST','https://storedemophotos.cookingisfun.ie'),
           'marker' => env('PHOTOSTORE_TAG','storedemo'),
-
     ],
 
     'mailgun' => [
