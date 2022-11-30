@@ -16,7 +16,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-
+    'version' => '2.1',
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -55,7 +55,7 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
-    'version' => '2.0',
+
     'asset_url' => env('ASSET_URL'),
 
     /*

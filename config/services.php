@@ -16,8 +16,12 @@ return [
 
     'demophotos' => [
           'host' => env('PHOTOSTORE_HOST','https://storedemophotos.cookingisfun.ie'),
+
           'marker' => env('PHOTOSTORE_TAG','storedemo'),
+          'galleryhost' => env('GALLERY_HOST', 'https://alldemophotos.cookingisfun.ie'),
     ],
+
+     'imgix' => ['host' => env('IMGIX_HOST','https://bcsdemophotos.imgix.net')],
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
