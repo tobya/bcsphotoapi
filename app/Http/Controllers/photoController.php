@@ -535,12 +535,15 @@ function GetGalleryPhotos($Gallery){
     $i++;
 
     // Now using imgix to resize.
-    $imgurl = 'https://bcsdemophotos.imgix.net' . $filename ;
+    $imgurl = config('services.imgix.host') . $filename ;
     $imgurlsized = $imgurl . '?w=600';
-    $link = config('services.demophotos.host') . $filename;
+    $link = config('services.demophotos.host') . '/allimages/Gallery'. $filename;
+    $gallerylink = config('services.demophotos.galleryhost') . $filename;
 
     $imgs[] = array('caption'=> '' , 'src' => $imgurlsized,
-                    'basesrc' => $imgurl,  'photolink' => $link,
+                    'basesrc' => $imgurl,
+                    'photolink' => $link,
+                    'gallerylink' => $gallerylink,
                     'tags' => '', 'recipeversionid' => '' );
   }
 
