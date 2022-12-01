@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
@@ -286,22 +287,25 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
   // In an error no gallery will match
   if ($GalleryArray == []){
-
       return response()->json(['randomimage' => [], 'album' => [],'status'=> 404, 'error' => ['msg' => 'No Matching Galleries']]);
   }
-
   $RandomGalleryKey = array_rand($GalleryArray);
 
-  $AlbumImages = $this->getGalleryPhotos( $GalleryArray[$RandomGalleryKey]);
+    $ChosenGallery = $GalleryArray[$RandomGalleryKey];
+    // Sometime Datetime is false if Folder isnt a date, check.
+    if ($ChosenGallery['DTFolder'] != false){
+        $AlbumImages = $this->getGalleryPhotos( $GalleryArray[$RandomGalleryKey]);
+    } else {
+        //recurse
+        Log::debug('Photo Api Recursion  \\',$ChosenGallery);
+        return $this->GalleryImageRandomMonth($request, $Year, $Month);
+    }
 
   $RandomImageKey = array_rand($AlbumImages);
 
   $RandomImage = $AlbumImages[$RandomImageKey];
 
-
   return response()->json(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
-
-
 
 }
 
@@ -518,6 +522,9 @@ function LoadPhotoGallery($Gallery){
         }
     }
 
+    return ['info' => '', 'images' => []];
+
+
 }
 
     /**
@@ -529,8 +536,8 @@ function GetGalleryPhotos($Gallery){
 
 
   $GalleryImages =  $this->LoadPhotoGallery($Gallery);
-  $i = 0;
 
+  $i = 0;
   foreach ($GalleryImages['images'] as $filename) {
     $i++;
 
@@ -564,8 +571,9 @@ function LoadAllPhotos($year = null){
        }
 
     $json = file_get_contents($galleryurl);
-
-    file_put_contents($PhotosFilename, $json);
+    if ($json){
+        file_put_contents($PhotosFilename, $json);
+    }
   }
   return json_decode( $json,true);
 }
