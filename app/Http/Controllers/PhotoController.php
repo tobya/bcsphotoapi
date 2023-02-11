@@ -121,7 +121,7 @@ public function AllGalleryPathURLs(){
   }
 
   public function AllGalleryInfo_IncludingPathIDs(){
-   $GalleryInfo = AllGalleryInfo_IncludingPathIDs_lookup();
+   $GalleryInfo = $this->AllGalleryInfo_IncludingPathIDs_lookup();
       return response()->json($GalleryInfo);
   }
 
@@ -538,7 +538,7 @@ function GetGalleryPhotos($Gallery){
 
   $GalleryImages =  $this->LoadPhotoGallery($Gallery);
     Log::debug('calling gallery', $Gallery);
-    
+
   $i = 0;
   $imgs = [];
   foreach ($GalleryImages['images'] as $filename) {
