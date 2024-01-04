@@ -36,6 +36,8 @@ Route::Get('/allconvertzen', [photoController::class, 'AllGalleryInfo_ConvertDBP
 Route::Get('/allloadrecipepaths', [photoController::class, 'AllGalleryInfo_IncludingPathIDs']);
 Route::Get('/gallerypathurls', [photoController::class, 'AllGalleryPathURLs']);
 
+Route::Get('/galleries/list/{year}', [photoController::class,'YearGallery']);
+
 // Get Random Image
 Route::Get('/images/random/', [photoController::class, 'GalleryImageRandom']);
 Route::Get('/images/random/{year}/', [photoController::class, 'GalleryImageRandomYear']);

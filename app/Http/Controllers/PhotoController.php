@@ -121,12 +121,19 @@ public function AllGalleryPathURLs(){
   }
 
   public function AllGalleryInfo_IncludingPathIDs(){
-   $GalleryInfo = AllGalleryInfo_IncludingPathIDs_lookup();
+   $GalleryInfo = $this->AllGalleryInfo_IncludingPathIDs_lookup();
       return response()->json($GalleryInfo);
   }
 
   public function YearPhotoInfo(Request $request, $year) {
+        abort(501);
+  }
 
+  public function YearGallery(Request $request, $year){
+        $AllGallery = $this->LoadYearGallery($year);
+
+
+        return response()->json( $AllGallery);
   }
 
   public function GalleryAlbum(Request $request, $demodate) {
@@ -148,7 +155,46 @@ public function AllGalleryPathURLs(){
     return $this->LoadGalleryAlbum($AllGallery, $DateofDemo);
   }
 
-    /**
+
+  private function LoadYearGallery($Year) {
+
+  // Load Gallery Cache for today
+  $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . "/galleryjson$Year.json");
+
+  if (file_exists($GalleryFilename) && (!$this->forceReload || $Year <> date('Y') )){
+
+    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
+    $AllGalleries = json_decode($AllAlbumInfo, true);
+
+  } else {
+
+    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=year&year=' . $Year );
+
+    // Add cache marker to json that is written to disk but not to returned.
+    $AllGalleries = json_decode($AllAlbumInfo,true);
+    $AllGalleries['items'] = $AllGalleries['allitems'];
+    $AllGalleries['items_count'] = $AllGalleries['allitems_count'];
+    unset($AllGalleries['allitems']);
+    unset($AllGalleries['allitems_count']);
+    $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
+    $this->saveGalleries($AllGalleries,$GalleryFilename);
+    $AllGalleries['source']['source'] = 'fetch';
+
+  }
+  if ($AllGalleries == NULL){
+    // AllGalleries will be NULL if the json file on disk is not valid json.
+    // if so delete the file.
+    unlink($GalleryFilename);
+    return ['status' => 405, 'message' => 'Error reading cache file from disk'];
+  } else {
+    return $AllGalleries;
+  }
+
+
+
+  }
+
+  /**
      * Return json list with details of Gallery and all images .
      * @param $AllGallery
      * @param $DemoDate
@@ -538,7 +584,7 @@ function GetGalleryPhotos($Gallery){
 
   $GalleryImages =  $this->LoadPhotoGallery($Gallery);
     Log::debug('calling gallery', $Gallery);
-    
+
   $i = 0;
   $imgs = [];
   foreach ($GalleryImages['images'] as $filename) {
