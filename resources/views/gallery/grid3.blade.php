@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-  <h2>Photos of Demonstration Recipes for {{$Demo->Folder_HumanReadable}}</h2>
+  <h1>Photos of Demonstration Recipes for {{$Demo->Folder_HumanReadable}}</h1>
 <table>
 
 <tr>
