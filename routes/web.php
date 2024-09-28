@@ -27,7 +27,7 @@ Route::Get('/', function () use ($router) {
              'app' => config('app.version'),
              'api' => '1.0'],
            'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos'
-                                            ]);
+             ]);
 });
 
 /*
