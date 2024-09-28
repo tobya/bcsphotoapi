@@ -33,9 +33,9 @@ public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
             'Photos' => json_decode(json_encode($Photos)),
             'Demo' => (object) $GalleryInfo,
         ]);
-       
+
       } else {
-        return response('no template');
+        return response('No Template Found',404);
       }
 
     } else {
