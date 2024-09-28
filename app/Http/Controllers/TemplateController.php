@@ -8,6 +8,7 @@ use Smarty;
 use Illuminate\Http\Request;
 
 
+use App\Http\Controllers\PhotoController;
 
 
 class TemplateController extends Controller
@@ -35,7 +36,7 @@ public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
         ]);
 
       } else {
-        return response('no template');
+        return response('No Template Found',404);
       }
 
     } else {
