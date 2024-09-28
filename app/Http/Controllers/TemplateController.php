@@ -7,6 +7,7 @@ use Smarty;
 
 use Illuminate\Http\Request;
 
+
 use App\Http\Controllers\PhotoController;
 
 
