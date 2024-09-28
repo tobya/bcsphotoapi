@@ -12,6 +12,6 @@
   @foreach ($Photos as $P)
     <li> <img src="{{$P->basesrc}}?w=400&h=400&fit=crop"><BR> {{$P->basesrc}}
       @endforeach
-  </ul>  
+  </ul>
 </body>
 </html>
