@@ -12,7 +12,7 @@
 
 <div class="bg-gray-300">
     <div class="mx-auto max-w-full px-4 lg:py-16  lg:max-w-7xl lg:px-8">
-        <h1 class="text-blue-950 text-xl font-bold p-2">Demo Photos for {{$Demo->Folder_HumanReadable}}</h1>
+        <h1 class="text-blue-950 text-3xl font-bold p-2">Demo Photos for {{$Demo->Folder_HumanReadable}}</h1>
         <h2 class="sr-only">Demo photos</h2>
 
         <div class="grid grid-cols-1 gap-x-6 gap-y-10  lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
