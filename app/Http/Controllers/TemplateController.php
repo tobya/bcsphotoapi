@@ -7,7 +7,7 @@ use Smarty;
 
 use Illuminate\Http\Request;
 
-include 'photoController.php';
+use App\Http\Controllers\PhotoController;
 
 
 class TemplateController extends Controller
@@ -17,7 +17,7 @@ class TemplateController extends Controller
 public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
 
     $PhotoGallery = new PhotoController();
-    
+
     $AllGallery = $PhotoGallery->LoadGalleries();
 
     $DateofDemo = date('Ymd',strtotime($demodate));
