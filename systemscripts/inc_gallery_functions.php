@@ -50,6 +50,8 @@ foreach ($Files as $F)
 
 }
 
+
+
 function MoveGalleryFile($File, $NewBaseDir, &$CoursesInfo = array())
 {
 	//echo $File . "<P>\n <PRE>";
@@ -247,7 +249,10 @@ function ExecuteAutoRotate($Dir)
 }
 
 
-
+/**
+ * If this writes /dirdetails.txt to the root year directory eg /2025/dirdetails.txt it may cause incorrect behaviour
+ * ideally, this function woudl check to ensure drive path is not / or ''
+ */ 
 function WriteDirectoryFile($DirPath, $Courses, $DateDetails)
 {
 		$FullFN = $DirPath  . 'dirdetails.txt';
