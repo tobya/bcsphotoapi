@@ -16,3 +16,8 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
+*.log
+filelog2.txt
+*.bak
+
