@@ -17,7 +17,7 @@
 
         <div class="grid grid-cols-1 gap-x-6 gap-y-10  lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             @foreach ($Photos as $P)
-                <a href="#" class="group">
+                <a href="{{$P->basesrc}}?w=800" class="group">
                     <div class=" w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
                         <img src="{{$P->basesrc}}?w=500&h=500&fit=crop"
                              class="h-full w-full object-cover object-center group-hover:opacity-75"
