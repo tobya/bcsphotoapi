@@ -556,7 +556,7 @@ function LoadPhotoGallery($Gallery){
     foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
         if (stripos($GalleryName,$Gallery['FolderName']) !== false){
             // If there was ever a scenario when 2 folders could have the same date, you would need to build up array.
-            // sometimes if the forlder for whatever reason is set to just the year, the first gallery will be returned.
+            // sometimes if the folder for whatever reason is set to just the year, the first gallery will be returned.
             foreach ($GalleryFiles['images'] as $fn){
                 if ($AllPhotos['path_clean']){
                    $Files[] = $fn;
@@ -583,7 +583,7 @@ function GetGalleryPhotos($Gallery){
 
 
   $GalleryImages =  $this->LoadPhotoGallery($Gallery);
-    Log::debug('calling gallery', $Gallery);
+
 
   $i = 0;
   $imgs = [];
