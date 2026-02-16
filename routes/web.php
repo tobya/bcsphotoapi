@@ -59,6 +59,8 @@ Route::Get('/files/all', [photoController::class, 'LoadAllPhotos']);
 Route::Get('/gallery/{demodate}/html/', [photoController::class, 'HTMLGalleryAlbum']);
 
 
+Route::Get('/gallery/{demodate}/html/index', [templateController::class,'index']);
+Route::Get('/gallery/{demodate}/html/list', [templateController::class,'index']);
 Route::Get('/gallery/{demodate}/html/{template}', [templateController::class,'HTMLGalleryAlbum']);
 
 

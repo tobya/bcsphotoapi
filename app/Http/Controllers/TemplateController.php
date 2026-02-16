@@ -8,13 +8,24 @@ use Smarty;
 use Illuminate\Http\Request;
 
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\PhotoController;
 
 
 class TemplateController extends Controller
 {
 
-
+public function index($demodate)
+{
+    $storage = Storage::build([
+        'driver' => 'local',
+        'root' => resource_path('/views/gallery'),
+    ]);
+    $allfiles = collect($storage->allFiles())->map(function ($file) {
+        return str($file)->beforeLast('.blade.php');
+    });
+    return view('gallery.index', compact('allfiles','demodate'));
+}
 public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
 
     $PhotoGallery = new PhotoController();
