@@ -6,8 +6,6 @@ namespace App\Http\Controllers;
 use Smarty;
 
 use Illuminate\Http\Request;
-
-
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\PhotoController;
 
@@ -26,6 +24,9 @@ public function index($demodate)
     });
     return view('gallery.index', compact('allfiles','demodate'));
 }
+
+
+
 public function HTMLGalleryAlbum(Request $request,  $demodate, $template){
 
     $PhotoGallery = new PhotoController();
