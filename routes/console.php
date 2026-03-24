@@ -36,6 +36,10 @@ Artisan::command('photoapi:generate', function () {
 
             $name = str($route->uri())->slug();
         }
+        if ($route->uri() == '/'){
+            continue;
+        }
+
         Artisan::call('saloon:request', ['integration' => 'photoApi',
             'name' => $name,
             '--method' => $route->methods()[0],
