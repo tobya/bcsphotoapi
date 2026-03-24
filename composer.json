@@ -10,6 +10,7 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.7",
+        "saloonphp/laravel-plugin": "dev-tobyroute",
         "tobya/bcsapiwrapper": "^4.0"
     },
     "require-dev": {
@@ -24,6 +25,15 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+  "repositories": {
+        "saloonphp/laravel-plugin": {
+            "type": "path",
+            "url": "C:\\Development\\github\\tests\\saloon-laravel-plugin",
+            "options": {
+                "symlink": true
+            }
         }
     },
     "autoload-dev": {
