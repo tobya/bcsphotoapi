@@ -41,9 +41,9 @@ Route::Get('/gallerypathurls', [photoController::class, 'AllGalleryPathURLs']);
 
 
 // Get Random Image
-Route::Get('/images/random/', [photoController::class, 'GalleryImageRandom']);
-Route::Get('/images/random/{year}/', [photoController::class, 'GalleryImageRandomYear']);
-Route::Get('/images/random/{year}/{month}/', [photoController::class, 'GalleryImageRandomMonth']);
+Route::Get('/images/random/', [photoController::class, 'GalleryImageRandom'])->name('random_image');
+Route::Get('/images/random/{year}/', [photoController::class, 'GalleryImageRandomYear'])->name('RandomImageForYear');
+Route::Get('/images/random/{year}/{month}/', [photoController::class, 'GalleryImageRandomMonth'])->name('Random.Image.ForMonth');
 Route::Get('/images/random/{year}/{month}/{day}', [photoController::class, 'GalleryImageRandomDay']);
 
 // years
