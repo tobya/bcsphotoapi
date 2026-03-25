@@ -10,8 +10,8 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.7",
-        "saloonphp/laravel-plugin": "dev-tobyroute",
-        "tobya/bcsapiwrapper": "^4.0"
+        "tobya/bcsapiwrapper": "^4.0",
+        "tobya/saloonforge": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -28,9 +28,10 @@
         }
     },
   "repositories": {
-        "saloonphp/laravel-plugin": {
+
+      "tobya/saloonforge": {
             "type": "path",
-            "url": "C:\\Development\\github\\tests\\saloon-laravel-plugin",
+            "url": "C:\\Development\\github\\packages\\saloon\\saloonforge",
             "options": {
                 "symlink": true
             }

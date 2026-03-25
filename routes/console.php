@@ -40,7 +40,7 @@ Artisan::command('photoapi:generate', function () {
             continue;
         }
 
-        Artisan::call('saloon:request', ['integration' => 'photoApi',
+        Artisan::call('saloon:forgerequest', ['integration' => 'photoApi',
             'name' => $name,
             '--method' => $route->methods()[0],
             '--route' => $route->uri() ,
@@ -51,3 +51,5 @@ Artisan::command('photoapi:generate', function () {
     }
     //print_r($r);
 });
+
+

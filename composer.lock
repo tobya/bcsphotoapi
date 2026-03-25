@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1ec6ec4de018bfa6921d4465bb755c03",
+    "content-hash": "22d6f2ca7026c0f2b46b83df597382f5",
     "packages": [
         {
             "name": "brick/math",
@@ -3355,24 +3355,30 @@
         },
         {
             "name": "saloonphp/laravel-plugin",
-            "version": "dev-tobyroute",
+            "version": "v3.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/saloonphp/laravel-plugin.git",
+                "reference": "7bca1ddaceed3ace9d19838cf183f99bf7b418d6"
+            },
             "dist": {
-                "type": "path",
-                "url": "C:/Development/github/tests/saloon-laravel-plugin",
-                "reference": "dd27657b1e317772b26b8c02ae09caffc4ca32bc"
+                "type": "zip",
+                "url": "https://api.github.com/repos/saloonphp/laravel-plugin/zipball/7bca1ddaceed3ace9d19838cf183f99bf7b418d6",
+                "reference": "7bca1ddaceed3ace9d19838cf183f99bf7b418d6",
+                "shasum": ""
             },
             "require": {
-                "illuminate/console": "^11.0 || ^v12.39.0",
-                "illuminate/support": "^11.0 || ^12.39.0",
+                "illuminate/console": "^11.0 || ^v12.39.0 || ^13.0",
+                "illuminate/support": "^11.0 || ^12.39.0 || ^13.0",
                 "php": "^8.2",
                 "saloonphp/saloon": "^3.5",
-                "symfony/finder": "^6.4 || ^7.0"
+                "symfony/finder": "^6.4 || ^7.0 || ^8.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.48",
                 "laravel/pulse": "^1.4",
                 "laravel/telescope": "^5.16",
-                "orchestra/testbench": "^9.15 || ^10.7",
+                "orchestra/testbench": "^9.15 || ^10.7 || ^11.0",
                 "pestphp/pest": "^3.0|^4.0",
                 "phpstan/phpstan": "^1.10.57|^2.0.2"
             },
@@ -3392,25 +3398,7 @@
                     "Saloon\\Laravel\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Saloon\\Laravel\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "post-autoload-dump": [
-                    "@php ./vendor/bin/testbench package:discover --ansi"
-                ],
-                "fix-code": [
-                    "./vendor/bin/php-cs-fixer fix --allow-risky=yes"
-                ],
-                "pstan": [
-                    "./vendor/bin/phpstan analyse --memory-limit=2G"
-                ],
-                "test": [
-                    "./vendor/bin/pest"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -3430,10 +3418,10 @@
                 "saloonphp",
                 "sdk"
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": false
-            }
+            "support": {
+                "source": "https://github.com/saloonphp/laravel-plugin/tree/v3.11.0"
+            },
+            "time": "2026-03-24T23:30:06+00:00"
         },
         {
             "name": "saloonphp/saloon",
@@ -3515,6 +3503,67 @@
                 }
             ],
             "time": "2026-03-02T22:04:13+00:00"
+        },
+        {
+            "name": "spatie/laravel-package-tools",
+            "version": "1.93.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-package-tools.git",
+                "reference": "0d097bce95b2bf6802fb1d83e1e753b0f5a948e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/0d097bce95b2bf6802fb1d83e1e753b0f5a948e7",
+                "reference": "0d097bce95b2bf6802fb1d83e1e753b0f5a948e7",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^10.0|^11.0|^12.0|^13.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.5",
+                "orchestra/testbench": "^8.0|^9.2|^10.0|^11.0",
+                "pestphp/pest": "^2.1|^3.1|^4.0",
+                "phpunit/php-code-coverage": "^10.0|^11.0|^12.0",
+                "phpunit/phpunit": "^10.5|^11.5|^12.5",
+                "spatie/pest-plugin-test-time": "^2.2|^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\LaravelPackageTools\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tools for creating Laravel packages",
+            "homepage": "https://github.com/spatie/laravel-package-tools",
+            "keywords": [
+                "laravel-package-tools",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-package-tools/issues",
+                "source": "https://github.com/spatie/laravel-package-tools/tree/1.93.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-02-21T12:49:54+00:00"
         },
         {
             "name": "spatie/macroable",
@@ -6235,6 +6284,94 @@
             "time": "2025-11-16T12:17:44+00:00"
         },
         {
+            "name": "tobya/saloonforge",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "C:/Development/github/packages/saloon/saloonforge",
+                "reference": "61b6ffc185f165ef0bbc2810661e011b2ff94ece"
+            },
+            "require": {
+                "illuminate/contracts": "^11.0||^12.0",
+                "php": "^8.3",
+                "saloonphp/laravel-plugin": "^3.11",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.14",
+                "nunomaduro/collision": "^8.8",
+                "orchestra/testbench": "^10.0.0||^9.0.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-arch": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0",
+                "spatie/laravel-ray": "^1.35"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Tobya\\SaloonForge\\SaloonForgeServiceProvider"
+                    ],
+                    "aliases": {
+                        "SaloonForge": "Tobya\\SaloonForge\\Facades\\SaloonForge"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tobya\\SaloonForge\\": "src/",
+                    "Tobya\\SaloonForge\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Tobya\\SaloonForge\\Tests\\": "tests/",
+                    "Workbench\\App\\": "workbench/app/"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@composer run prepare"
+                ],
+                "prepare": [
+                    "@php vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Toby Allen",
+                    "email": "tobyallen@toflidium.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Autogenerate Connectors and Requsts from Routes",
+            "homepage": "https://github.com/tobya/saloonforge",
+            "keywords": [
+                "Tobya",
+                "laravel",
+                "saloonforge"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": false
+            }
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.6.3",
             "source": {
@@ -8614,7 +8751,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "saloonphp/laravel-plugin": 20
+        "tobya/saloonforge": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
