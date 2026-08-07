@@ -18,12 +18,12 @@
       {
           $routes = collect(parent::getRoutes());
 
-          return $routes->filter(function (Route $route) {
+          $r = $routes->filter(function (Route $route) {
 
               $result = false;
-             // echo $route->uri() . "\n";
+             ray( $route->uri() . "\n");
               if (str($route->uri() )->startsWith('gallery')) {
-                 // echo "\n starts with gallery";
+                 ray( "\n starts with gallery");
                   $result = true;
               }
               //  echo $route->getAction('as') . "\nz";
@@ -38,7 +38,9 @@
               return $result;
 
           });
-
+          ray('set of routes');
+         ray($r);
+         return $r;
 
       }
 
