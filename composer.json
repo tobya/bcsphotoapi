@@ -27,6 +27,12 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
+    },    "autoload_dev": {
+        "psr-4": {
+
+            "Bcsapi\\V5\\": "Modules/bcsapi/V5/"
+
+        }
     },
   "repositories": {
 

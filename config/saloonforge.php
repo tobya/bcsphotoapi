@@ -27,8 +27,10 @@ return [
                 ],
                 ]
         ],
-             'namespace' => 'Bcsapi\V5\Photo\\',
-
+             'namespace' => 'Bcsapi\\V5\\Photo\\',
+          'output' => [
+              'dir' => base_path('Modules/bcsapi/V5/'),
+          ]
         ]
 ]
 
