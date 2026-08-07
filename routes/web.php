@@ -53,7 +53,6 @@ Route::Get('/galleries/list/{year}', [photoController::class,'YearGallery']);
 Route::Get('/gallery/{demodate}', [photoController::class, 'GalleryAlbum']);
 Route::Get('/gallery/{demodate}/nocache', [photoController::class, 'GalleryAlbum_noCache']);
 
-Route::Get('/files/all', [photoController::class, 'LoadAllPhotos']);
 
 // Return Gallery as basic HTML rather than JSON
 Route::Get('/gallery/{demodate}/html/', [photoController::class, 'HTMLGalleryAlbum']);
@@ -64,6 +63,7 @@ Route::Get('/gallery/{demodate}/html/list', [templateController::class,'index'])
 Route::Get('/gallery/{demodate}/html/{template}', [templateController::class,'HTMLGalleryAlbum']);
 
 
+Route::Get('/files/all', [photoController::class, 'LoadAllPhotos']);
 
 Route::Get('/purgecache/', [photoController::class, 'PurgeCache']);
 
