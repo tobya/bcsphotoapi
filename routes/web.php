@@ -34,7 +34,10 @@ Route::Get('/', function () use ($router) {
   Get All Galleries or all Galleries for specific Year.
 */
 Route::Get('/all', [photoController::class, 'AllGalleryInfo_ConvertDBPath'])->name('AllGalleries');
-Route::Get('/all/{year}', [photoController::class, 'YearPhotoInfo'])->name('AllPhotoInfoForYear');
+
+// deprecated
+Route::Get('/all/{year}', [photoController::class, 'YearPhotoInfo']);
+
 Route::Get('/allconvertzen', [photoController::class, 'AllGalleryInfo_ConvertDBPath']);
 Route::Get('/allloadrecipepaths', [photoController::class, 'AllGalleryInfo_IncludingPathIDs']);
 Route::Get('/gallerypathurls', [photoController::class, 'AllGalleryPathURLs']);

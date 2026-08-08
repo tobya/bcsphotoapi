@@ -3,9 +3,9 @@
 // config for Tobya/SaloonForge
 return [
     'integrations' => [
-        'photo' => [
+        'Photo' => [
             'routes' => [
-            //'selector' => \Tobya\SaloonForge\Selectors\RouteSelector::class,
+
             'selector_class' => \App\Http\Integrations\PhotoApiRouteSelector::class,
             'forgeroute_class' => \Tobya\SaloonForge\Extensions\ForgeRoute::class,
 
@@ -27,7 +27,7 @@ return [
                 ],
                 ]
         ],
-             'namespace' => 'Bcsapi\\V5\\Photo\\',
+             'namespace' => 'Bcsapi\\V5\\Photo',
           'output' => [
               'dir' => base_path('Modules/bcsapi/V5/'),
           ]
