@@ -30,7 +30,7 @@
     },    "autoload_dev": {
         "psr-4": {
 
-            "Bcsapi\\V5\\": "Modules/bcsapi/V5/"
+            "Bcsapi\\V5\\": "app/Http/Integrations/"
 
         }
     },
