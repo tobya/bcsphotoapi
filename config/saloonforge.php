@@ -13,7 +13,7 @@ return [
             'prefix' => ['/'],
             'exclude' =>
                 [
-                  'middleware' => [],
+                  'middleware' => ['web'],
                  'filter' =>        ['somenonese*'],
                  'unnamed' => false,
                 ],
@@ -30,6 +30,10 @@ return [
              'namespace' => 'Bcsapi\\V5\\Photo',
           'output' => [
               'dir' => base_path('Modules/bcsapi/V5/'),
+            'copy' => [
+                  'active' => true,
+                  'destination' => 'C:\\Development\\github\\packages\\bcsapi\\bcsapiwrapper\\src\\V5\\Photo\\',
+              ]
           ]
         ]
 ]

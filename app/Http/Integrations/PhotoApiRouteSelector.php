@@ -22,14 +22,22 @@
 
               $result = false;
              ray( $route->uri() . "\n");
+
               if (str($route->uri() )->startsWith('gallery')) {
                  ray( "\n starts with gallery");
                   $result = true;
               }
               //  echo $route->getAction('as') . "\nz";
-              if ($route->getAction('as') <> ''){
-                  $result = true;
+        //     if ($route->getAction('as') <> ''){
+        //         echo "Action is tru as AS  \n " . $route->getAction('as') . "\n---";
+        //         print_r ( $route->getAction());
+        //         $result = true;
+        //     }
+
+              if ($route->getName() <> ''){
+                  return true;
               }
+
 
               if ($result){
                 //  echo "\n adding";
