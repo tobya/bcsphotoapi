@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PhotoController;
+use App\Http\Controllers\photoControllerV2;
 use App\Http\Controllers\TemplateController;
 
 /*
@@ -14,6 +14,7 @@ use App\Http\Controllers\TemplateController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+| prefix : api/v2/
 */
 
 
@@ -31,32 +32,23 @@ Route::Get('/', function () use ($router) {
 /*
   Get All Galleries or all Galleries for specific Year.
 */
-Route::Get('/all', [photoController::class, 'AllGalleryInfo_ConvertDBPath'])->name('AllGalleries');
+Route::Get('/all', [photoControllerV2::class, 'AllGalleryInfo_ConvertDBPath'])->name('AllGalleries');
 
 // Get Random Image
-Route::Get('/images/random/', [photoController::class, 'GalleryImageRandom']);
-Route::Get('/images/random/{year}/', [photoController::class, 'GalleryImageRandomYear']);
-Route::Get('/images/random/{year}/{month}/', [photoController::class, 'GalleryImageRandomMonth']);
-Route::Get('/images/random/{year}/{month}/{day}', [photoController::class, 'GalleryImageRandomDay'])->name('RandomImage');
+Route::Get('/images/random/', [photoControllerV2::class, 'GalleryImageRandom']);
+Route::Get('/images/random/{year}/', [photoControllerV2::class, 'GalleryImageRandomYear']);
+Route::Get('/images/random/{year}/{month}/', [photoControllerV2::class, 'GalleryImageRandomMonth']);
+Route::Get('/images/random/{year}/{month}/{day}', [photoControllerV2::class, 'GalleryImageRandomDay'])->name('RandomImage');
 
 // years
-Route::Get('/galleries/list/{year}', [photoController::class,'YearGallery'])->name('GalleryListForYear');
+Route::Get('/galleries/list/{year}', [photoControllerV2::class,'YearGallery'])->name('GalleryListForYear');
 
 // Get Specific Gallery info for date.
-Route::Get('/gallery/{demodate}', [photoController::class, 'GalleryAlbum'])->name('DemoGallery');
-Route::Get('/gallery/{demodate}/nocache', [photoController::class, 'GalleryAlbum_noCache'])->name('DemoGallery_Uncached');
+Route::Get('/gallery/{demodate}', [photoControllerV2::class, 'GalleryAlbum'])->name('DemoGallery');
+Route::Get('/gallery/{demodate}/nocache', [photoControllerV2::class, 'GalleryAlbum_noCache'])->name('DemoGallery_Uncached');
 
-Route::Get('/files/all', [photoController::class, 'LoadAllPhotos'])->name('AllImages');
-
-// Return Gallery as basic HTML rather than JSON
-Route::Get('/gallery/{demodate}/html/', [photoController::class, 'HTMLGalleryAlbum']);
+Route::Get('/files/all', [photoControllerV2::class, 'LoadAllPhotos'])->name('AllImages');
 
 
-Route::Get('/gallery/{demodate}/html/index', [templateController::class,'index']);
-Route::Get('/gallery/{demodate}/html/list', [templateController::class,'index']);
-Route::Get('/gallery/{demodate}/html/{template}', [templateController::class,'HTMLGalleryAlbum']);
-
-
-
-Route::Get('/purgecache/', [photoController::class, 'PurgeCache'])->name('PurgeCache');
+Route::Get('/purgecache/', [photoControllerV2::class, 'PurgeCache'])->name('PurgeCache');
 

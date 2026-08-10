@@ -10,7 +10,8 @@
   {
 
 // Returns 1 random image from one random gallery.
-public function GalleryImageRandom(){
+public function
+GalleryImageRandom(){
   $AllGalleries = $this->LoadGalleries();
 
   $RandomGalleryKey = array_rand($AllGalleries['allitems']);

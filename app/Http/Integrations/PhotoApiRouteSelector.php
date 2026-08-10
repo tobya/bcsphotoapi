@@ -17,7 +17,7 @@
       public function getRoutes()
       {
           $routes = collect(parent::getRoutes());
-
+         //   return $routes;
           $r = $routes->filter(function (Route $route) {
 
               $result = false;

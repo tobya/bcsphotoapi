@@ -9,9 +9,7 @@
   {
     public function register(): void
     {
-      Blade::directive('comment', function ($expression) {
-          return '';
-      });
+
     }
 
     public function boot(): void
