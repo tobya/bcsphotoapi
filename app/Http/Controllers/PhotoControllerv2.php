@@ -5,6 +5,7 @@
 
 
   use Illuminate\Http\Request;
+  use App\Http\Responses\PhotoApiResponseV5;
 
   class PhotoControllerv2 extends PhotoController
   {
@@ -23,7 +24,7 @@ GalleryImageRandom(){
   $RandomImage = $AlbumImages[$RandomImageKey];
 
 
-  return response()->json(['randomimage' => $RandomImage, 'album' =>  $AllGalleries['allitems'][$RandomGalleryKey]]);
+  return response()->json(['randomimage' => $RandomImage, 'album' =>  $this->ConvertAlbumToV5( $AllGalleries['allitems'][$RandomGalleryKey])]);
 }
 
 public function GalleryImageRandomYear(Request $request, $Year){
@@ -132,10 +133,37 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
   $RandomImage = $AlbumImages[$RandomImageKey];
 
 
-  return response()->json(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
+ // return response()->json(
+ //     ['randomimage' => $RandomImage,
+ //      'album' => $this->ConvertAlbumToV5( $GalleryArray[$RandomGalleryKey])
+ //     ]
+ // );
+
+    return new PhotoApiResponseV5(
+     [
+         'randomimage' => $RandomImage,
+      'album' => $this->ConvertAlbumToV5( $GalleryArray[$RandomGalleryKey])
+      ]
+
+    );
 
 
 
 }
+
+      private function ConvertAlbumToV5(array $Gallery) : array
+      {
+
+          $includedKeys = collect(['Link','FolderName','DemoDate']);
+            $c = collect($Gallery)->mapWithKeys(function ($item,$key) use ($includedKeys) {
+                if ($includedKeys->contains($key)){
+                    return [strtolower($key) => $item];
+                }
+                return [];
+            })->filter()->all();
+
+            return $c;
+
+      }
 
   }
