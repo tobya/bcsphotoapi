@@ -153,8 +153,10 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
       private function ConvertAlbumToV5(array $Gallery) : array
       {
-
+            // only include the following keys
           $includedKeys = collect(['Link','FolderName','DemoDate']);
+
+          // lowercase the keys and remove keys not included.
             $c = collect($Gallery)->mapWithKeys(function ($item,$key) use ($includedKeys) {
                 if ($includedKeys->contains($key)){
                     return [strtolower($key) => $item];
