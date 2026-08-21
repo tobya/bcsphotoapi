@@ -12,7 +12,7 @@
   {
 
     public function __construct(
-        protected array |Collection $data,
+        protected array | Collection | null $data,
         protected int $statusCode = 200,
     )
     {
@@ -23,7 +23,12 @@
      */
     public function toResponse($request,)
     {
-        $this->data['api'] = ['version' => '2.0'];
+        if(isset($this->data['api'])){
+            $this->data['api']['version'] = '3.0';
+        } else {
+
+        $this->data['api'] = ['version' => '3.0'];
+        }
 
       return new JsonResponse(
           $this->data,

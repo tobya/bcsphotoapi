@@ -78,7 +78,7 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
   // In an error no gallery will match
   if ($GalleryArray == []){
-      return response()->json(['randomimage' => [], 'album' => [],'status'=> 404, 'error' => ['msg' => 'No Matching Galleries']]);
+      return $this->jsonresponse(['randomimage' => [], 'album' => [],'status'=> 404, 'error' => ['msg' => 'No Matching Galleries']]);
   }
   $RandomGalleryKey = array_rand($GalleryArray);
 
@@ -96,7 +96,7 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
   $RandomImage = $AlbumImages[$RandomImageKey];
 
-  return response()->json(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
+  return $this->jsonresponse(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
 
 }
 
@@ -121,7 +121,7 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
   // In an error no gallery will match
   if (!isset($GalleryArray)){
 
-      return response()->json(['randomimage' => [], 'album' => [],'status'=> 404, 'requested_date' => $Year.$Month.$Day, 'error' => ['msg' => 'No Matching Galleries']]);
+      return $this->jsonresponse(['randomimage' => [], 'album' => [],'status'=> 404, 'requested_date' => $Year.$Month.$Day, 'error' => ['msg' => 'No Matching Galleries']]);
   }
 
   $RandomGalleryKey = array_rand($GalleryArray);
@@ -139,7 +139,7 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
  //     ]
  // );
 
-    return new PhotoApiResponseV5(
+    return $this->jsonresponse(
      [
          'randomimage' => $RandomImage,
       'album' => $this->ConvertAlbumToV5( $GalleryArray[$RandomGalleryKey])
@@ -151,6 +151,11 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
 }
 
+      /**
+       * 
+       * @param array $Gallery
+       * @return array
+       */
       private function ConvertAlbumToV5(array $Gallery) : array
       {
             // only include the following keys
@@ -166,6 +171,19 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
             return $c;
 
+      }
+
+      /**
+       * Provide a standard response format
+       * @param $data
+       * @return PhotoApiResponseV5
+       */
+      public function jsonresponse($data = null, $statusCode = 200)
+      {
+              return new PhotoApiResponseV5(
+                    $data,
+                  $statusCode
+            );
       }
 
   }
