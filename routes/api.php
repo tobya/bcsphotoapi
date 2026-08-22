@@ -45,7 +45,6 @@ Route::Get('/galleries/list/{year}', [photoControllerV2::class,'YearGallery'])->
 // Get Specific Gallery info for date.
 Route::Get('/gallery/{demodate}', [photoControllerV2::class, 'GalleryAlbum'])->name('DemoGallery');
 
-Route::Get('/files/all', [photoControllerV2::class, 'LoadAllPhotos'])->name('AllImages');
 
 
 Route::Get('/purgecache/', [photoControllerV2::class, 'PurgeCache'])->name('PurgeCache');

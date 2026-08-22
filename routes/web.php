@@ -66,7 +66,7 @@ Route::Get('/gallery/{demodate}/html/list', [templateController::class,'index'])
 Route::Get('/gallery/{demodate}/html/{template}', [templateController::class,'HTMLGalleryAlbum']);
 
 
-Route::Get('/files/all', [photoController::class, 'LoadAllPhotos']);
+
 
 Route::Get('/purgecache/', [photoController::class, 'PurgeCache'])->name('PurgeCache');
 

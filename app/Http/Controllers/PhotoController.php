@@ -607,7 +607,7 @@ function GetGalleryPhotos($Gallery){
   return $imgs;
 }
 
-function LoadAllPhotos($year = null){
+protected function LoadAllPhotos($year = null){
 
     $PhotosFilename =storage_path('app/data/' . config('services.demophotos.marker') . '/allimages'.$year.'.json');
    if (file_exists($PhotosFilename) && !$this->forceReload){
@@ -621,6 +621,7 @@ function LoadAllPhotos($year = null){
        }
 
     $json = file_get_contents($galleryurl);
+
     if ($json){
         file_put_contents($PhotosFilename, $json);
     }

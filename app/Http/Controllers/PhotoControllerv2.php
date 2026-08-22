@@ -5,6 +5,7 @@
 
 
   use Illuminate\Http\Request;
+  use Illuminate\Support\Facades\Cache;
   use App\Http\Responses\PhotoApiResponseV5;
 
   class PhotoControllerv2 extends PhotoController
@@ -157,17 +158,26 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
             $AllGalleries = $Galleries;
 
-            // change items
-            $AllGalleries['items'] = [];
-            foreach ($Galleries['items'] as $key => $gallery) {
-                // do not set dates as key
-                $AllGalleries['items'][] = $this->ConvertAlbumToV5($gallery);
-            }
-
-            $AllGalleries['recent']['mostrecent'] = $this->ConvertAlbumToV5($AllGalleries['recent']['mostrecent']);
-            $AllGalleries['recent']['prevday'] = $this->ConvertAlbumToV5($AllGalleries['recent']['prevday']);
+            // tidy up for v3
             $AllGalleries['debug'] = $AllGalleries['Debug'];
             unset($AllGalleries['Debug']);
+
+            unset($AllGalleries['recent'] );
+
+            if ($AllGalleries['items_count'] > 0){
+
+                // change items
+                $AllGalleries['items'] = [];
+                foreach ($Galleries['items'] as $key => $gallery) {
+                    // do not set dates as key
+                    $AllGalleries['items'][] = $this->ConvertAlbumToV5($gallery);
+                }
+
+              //  $AllGalleries['recent']['mostrecent'] = $this->ConvertAlbumToV5($AllGalleries['recent']['mostrecent']);
+               // $AllGalleries['recent']['prevday'] = $this->ConvertAlbumToV5($AllGalleries['recent']['prevday']);
+            } else {
+                $AllGalleries['status'] = 404;
+            }
 
             return $this->jsonresponse( $AllGalleries);
       }
@@ -177,27 +187,90 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
                 $DateofDemo = date('Ymd',strtotime($demodate));
 
-             //   return $this->LoadGalleryAlbum($AllGallery, $DateofDemo);
 
 
-    if (isset($AllGallery['allitems'][$DateofDemo])){
-      $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
+                if (isset($AllGallery['allitems'][$DateofDemo])){
+                  $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
 
-      $GalleryInfo['Link'] = config('services.demophotos.host') . $GalleryInfo['Link'];
-      $gallery_details = $this->ConvertAlbumToV5($GalleryInfo);
-      $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
-      return $this->jsonresponse(array('status'=>200,
-                                    'gallery' => $gallery_details,
-                                    'images_count' => count($Photos),
-                                    'images' => $Photos ));
-    } else {
-      return $this->jsonresponse(array(
-                    'status'=>404, 'images' => [],
-                    'images_count' => 0 , 'request_time' => date('c'),
-                    'demodate' => $DateofDemo ));
-    }
+                  $GalleryInfo['Link'] = config('services.demophotos.host') . $GalleryInfo['Link'];
+                  $gallery_details = $this->ConvertAlbumToV5($GalleryInfo);
+                  $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
+                  return $this->jsonresponse(array('status'=>200,
+                                                'gallery' => $gallery_details,
+                                                'images_count' => count($Photos),
+                                                'images' => $Photos ));
+                } else {
+                  return $this->jsonresponse(array(
+                                'status'=>404, 'images' => [],
+                                'images_count' => 0 , 'request_time' => date('c'),
+                                'demodate' => $DateofDemo ));
+                }
 
           }
+
+       public function RecentGallery()
+       {
+              $Galleries = $this->LoadYearGallery(now()->year);
+             // $Galleries = $this->LoadYearGallery(2021);
+
+            $AllGalleries = $Galleries;
+
+            // tidy up for v3
+            //$AllGalleries['debug'] = $AllGalleries['Debug'];
+            unset($AllGalleries['Debug']);
+
+          //  dd($AllGalleries);
+            unset($AllGalleries['items'] );
+            unset($AllGalleries['items_count'] );
+
+        //    if ($AllGalleries['items_count'] > 0){
+//
+        //        // change items
+        //        $AllGalleries['items'] = [];
+        //        foreach ($Galleries['items'] as $key => $gallery) {
+        //            // do not set dates as key
+        //            $AllGalleries['items'][] = $this->ConvertAlbumToV5($gallery);
+        //        }
+//
+        //      //  $AllGalleries['recent']['mostrecent'] = $this->ConvertAlbumToV5($AllGalleries['recent']['mostrecent']);
+        //       // $AllGalleries['recent']['prevday'] = $this->ConvertAlbumToV5($AllGalleries['recent']['prevday']);
+        //    } else {
+        //        $AllGalleries['status'] = 404;
+        //    }
+
+            return $this->jsonresponse( $AllGalleries);
+       }
+
+
+
+    function AllGalleryPhotos($year = null){
+
+
+      //  $PhotosKey = config('services.demophotos.marker-allimages-'.$year;
+      //  Cache::store('file')->put($PhotosKey,function (){
+//
+      //  })
+//
+       if (file_exists($PhotosFilename) && !$this->forceReload){
+        $json = file_get_contents($PhotosFilename);
+
+      } else {
+           if ($year){
+                $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=yearfiles&year='.$year.'&cleanpaths';
+           } else {
+                $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=files&cleanpaths';
+           }
+
+        $json = file_get_contents($galleryurl);
+
+        if ($json){
+            file_put_contents($PhotosFilename, $json);
+        }
+      }
+      return json_decode( $json,true);
+    }
+
+
 
       /**
        * Convert a gallery album to V3/5 and lowercase keys
