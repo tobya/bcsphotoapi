@@ -27,7 +27,7 @@ class YearFileInfo extends Request
     {
         $url = Url::fromString('/info_api_v2.php')
                  ->withQueryParameters([
-                   'infotype' => 'year',
+                   'infotype' => 'yearfiles',
                    'year' => $this->year,
                    'cleanpaths' => 'true',
                 ]);

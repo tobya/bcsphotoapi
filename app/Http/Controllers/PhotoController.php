@@ -465,7 +465,7 @@ function LoadGalleries(){
   } else {
 
     $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
-    dd($AllAlbumInfo);
+    //dd($AllAlbumInfo);
     // Add cache marker to json that is written to disk but not to returned.
     $AllGalleries = json_decode($AllAlbumInfo,true);
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
@@ -555,7 +555,7 @@ function GetGalleryInfo($GalleryDate ){
 function LoadPhotoGallery($Gallery){
 
     $AllPhotos = $this->LoadAllPhotos(date('Y',strtotime($Gallery['DemoDate'])));
-    dd($AllPhotos);
+   // dd($AllPhotos);
     foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
         if (stripos($GalleryName,$Gallery['FolderName']) !== false){
             // If there was ever a scenario when 2 folders could have the same date, you would need to build up array.
