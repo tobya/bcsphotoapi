@@ -13,15 +13,15 @@
         "saloonphp/laravel-plugin": "^4.3",
         "spatie/ray": "^1.48",
         "spatie/url": "^2.4",
-        "tobya/bcsapiwrapper": "^4.0",
-        "tobya/saloonforge": "*"
+        "tobya/bcsapiwrapper": "^4.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^11.0"
+        "phpunit/phpunit": "^11.0",
+        "tobya/saloonforge": "^0.1.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,16 +36,7 @@
 
         }
     },
-  "repositories": {
 
-      "tobya/saloonforge": {
-            "type": "path",
-            "url": "C:\\Development\\github\\packages\\saloon\\saloonforge",
-            "options": {
-                "symlink": true
-            }
-        }
-    },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
