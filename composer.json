@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.7",
         "saloonphp/laravel-plugin": "^4.3",
         "spatie/ray": "^1.48",
+        "spatie/url": "^2.4",
         "tobya/bcsapiwrapper": "^4.0",
         "tobya/saloonforge": "*"
     },
