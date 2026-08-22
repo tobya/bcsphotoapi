@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 use App\Http\Integrations\StoreDemoPhotos\StoreDemoPhotos;
-use App\Http\Integrations\StoreDemoPhotos\Requests\AllFileInfo;
+use App\Http\Integrations\StoreDemoPhotos\Requests\YearFileInfo;
 
 
 class PhotoController extends Controller
@@ -614,23 +614,25 @@ function GetGalleryPhotos($Gallery){
      * @param $year
      * @return mixed
      */
-protected function LoadAllPhotos($year = null){
+protected function LoadAllPhotos($year){
 
-        $yearKey = $year ?? 'all';
+        $yearKey = $year;
 
        $PhotosKey = config('services.demophotos.marker') . '-allimages-'.$yearKey;
         if ( $this->forceReload){
             Cache::store('file')->forget($PhotosKey);
         }
 
-       $AllImageArray =  Cache::store('file')->rememberForever($PhotosKey,function () use ($year){
+       $AllImageArray =  Cache::store('file')
+                              ->rememberForever($PhotosKey,
+                                  function () use ($year){
 
-               $StoreDemoPhotosConnector = new StoreDemoPhotos();
+                                       $StoreDemoPhotosConnector = new StoreDemoPhotos();
 
-               $Apiresponse = $StoreDemoPhotosConnector->send(new AllFileInfo($year));
-               return  json_decode( $Apiresponse->body(),true);
+                                       $Apiresponse = $StoreDemoPhotosConnector->send(new YearFileInfo($year));
+                                       return  json_decode( $Apiresponse->body(),true);
 
-        });
+                                });
 
 
        return $AllImageArray;
