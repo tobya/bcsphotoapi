@@ -342,7 +342,7 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
     $ChosenGallery = $GalleryArray[$RandomGalleryKey];
     // Sometime Datetime is false if Folder isnt a date, check.
-    if ($ChosenGallery['DTFolder'] != false){
+    if ($ChosenGallery['DemoDate'] != false){
         $AlbumImages = $this->getGalleryPhotos( $GalleryArray[$RandomGalleryKey]);
     } else {
         //recurse
@@ -554,7 +554,7 @@ function GetGalleryInfo($GalleryDate ){
      */
 function LoadPhotoGallery($Gallery){
 
-    $AllPhotos = $this->LoadAllPhotos(date('Y',$Gallery['DTFolder']));
+    $AllPhotos = $this->LoadAllPhotos(date('Y',strtotime($Gallery['DemoDate'])));
 
     foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
         if (stripos($GalleryName,$Gallery['FolderName']) !== false){
@@ -609,6 +609,11 @@ function GetGalleryPhotos($Gallery){
   return $imgs;
 }
 
+    /**
+     * Retrieve details of all files from StoreDemoPhotos.  Should be cached for use by other calls.
+     * @param $year
+     * @return mixed
+     */
 protected function LoadAllPhotos($year = null){
 
         $yearKey = $year ?? 'all';

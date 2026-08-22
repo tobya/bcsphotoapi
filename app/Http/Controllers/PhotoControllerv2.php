@@ -5,6 +5,7 @@
 
 
   use Illuminate\Http\Request;
+  use Illuminate\Support\Facades\Log;
   use Illuminate\Support\Facades\Cache;
   use App\Http\Responses\PhotoApiResponseV5;
 
@@ -85,7 +86,7 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
     $ChosenGallery = $GalleryArray[$RandomGalleryKey];
     // Sometime Datetime is false if Folder isnt a date, check.
-    if ($ChosenGallery['DTFolder'] != false){
+    if ($ChosenGallery['DemoDate'] != false){
         $AlbumImages = $this->getGalleryPhotos( $GalleryArray[$RandomGalleryKey]);
     } else {
         //recurse
