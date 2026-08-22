@@ -41,6 +41,9 @@ Route::Get('/images/random/{year}/{month}/{day}', [photoControllerV2::class, 'Ga
 
 // years
 Route::Get('/galleries/list/{year}', [photoControllerV2::class,'YearGallery'])->name('GalleryListForYear');
+Route::Get('/gallery/list/{year}', [photoControllerV2::class,'YearGallery']);
+Route::Get('/galleries/recent', [photoControllerV2::class,'RecentGallery'])->name('GalleryListForYear');
+
 
 // Get Specific Gallery info for date.
 Route::Get('/gallery/{demodate}', [photoControllerV2::class, 'GalleryAlbum'])->name('DemoGallery');
