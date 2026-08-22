@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
-
+use App\Http\Integrations\StoreDemoPhotos\StoreDemoPhotos;
+use App\Http\Integrations\StoreDemoPhotos\Requests\AllFileInfo;
 
 
 class PhotoController extends Controller
@@ -609,24 +611,24 @@ function GetGalleryPhotos($Gallery){
 
 protected function LoadAllPhotos($year = null){
 
-    $PhotosFilename =storage_path('app/data/' . config('services.demophotos.marker') . '/allimages'.$year.'.json');
-   if (file_exists($PhotosFilename) && !$this->forceReload){
-    $json = file_get_contents($PhotosFilename);
+        $yearKey = $year ?? 'all';
 
-  } else {
-       if ($year){
-            $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=yearfiles&year='.$year.'&cleanpaths';
-       } else {
-            $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=files&cleanpaths';
-       }
+       $PhotosKey = config('services.demophotos.marker') . '-allimages-'.$yearKey;
+        if ( $this->forceReload){
+            Cache::store('file')->forget($PhotosKey);
+        }
 
-    $json = file_get_contents($galleryurl);
+       $AllImageArray =  Cache::store('file')->rememberForever($PhotosKey,function () use ($year){
 
-    if ($json){
-        file_put_contents($PhotosFilename, $json);
-    }
-  }
-  return json_decode( $json,true);
+               $StoreDemoPhotosConnector = new StoreDemoPhotos();
+
+               $Apiresponse = $StoreDemoPhotosConnector->send(new AllFileInfo($year));
+               return  json_decode( $Apiresponse->body(),true);
+
+        });
+
+
+       return $AllImageArray;
 }
 
 
