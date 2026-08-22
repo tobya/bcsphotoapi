@@ -35,8 +35,6 @@ Route::Get('/', function () use ($router) {
 */
 Route::Get('/all', [photoController::class, 'AllGalleryInfo_ConvertDBPath'])->name('AllGalleries');
 
-// deprecated
-Route::Get('/all/{year}', [photoController::class, 'YearPhotoInfo']);
 
 Route::Get('/allconvertzen', [photoController::class, 'AllGalleryInfo_ConvertDBPath']);
 Route::Get('/allloadrecipepaths', [photoController::class, 'AllGalleryInfo_IncludingPathIDs']);

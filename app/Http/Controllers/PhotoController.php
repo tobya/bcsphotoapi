@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
 use App\Http\Integrations\StoreDemoPhotos\StoreDemoPhotos;
+use App\Http\Integrations\StoreDemoPhotos\Requests\YearInfo;
 use App\Http\Integrations\StoreDemoPhotos\Requests\YearFileInfo;
 
 
@@ -127,9 +128,7 @@ public function AllGalleryPathURLs(){
       return response()->json($GalleryInfo);
   }
 
-  public function YearPhotoInfo(Request $request, $year) {
-        abort(501);
-  }
+
 
   public function YearGallery(Request $request, $year){
         $AllGallery = $this->LoadYearGallery($year);
@@ -171,7 +170,7 @@ public function AllGalleryPathURLs(){
 //  } else {
 
     //$AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=year&year=' . $Year );
-    $AllGalleries = $this->LoadAllPhotos($Year);
+    $AllGalleries = $this->LoadAllYearInfoPhotos($Year);
     // Add cache marker to json that is written to disk but not to returned.
    // $AllGalleries = json_decode($AllAlbumInfo,true);
     $AllGalleries['items'] = $AllGalleries['allitems'];
@@ -554,7 +553,7 @@ function GetGalleryInfo($GalleryDate ){
      */
 function LoadPhotoGallery($Gallery){
 
-    $AllPhotos = $this->LoadAllPhotos(date('Y',strtotime($Gallery['DemoDate'])));
+    $AllPhotos = $this->LoadAllYearCleanFilePhotos(date('Y',strtotime($Gallery['DemoDate'])));
    // dd($AllPhotos);
     foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
         if (stripos($GalleryName,$Gallery['FolderName']) !== false){
@@ -614,11 +613,11 @@ function GetGalleryPhotos($Gallery){
      * @param $year
      * @return mixed
      */
-protected function LoadAllPhotos($year){
+protected function LoadAllYearCleanFilePhotos($year){
 
         $yearKey = $year;
 
-       $PhotosKey = config('services.demophotos.marker') . '-allimages-'.$yearKey;
+       $PhotosKey = config('services.demophotos.marker') . '-LoadAllYearCleanFilePhotos-'.$yearKey;
         if ( $this->forceReload){
             Cache::store('file')->forget($PhotosKey);
         }
@@ -630,6 +629,36 @@ protected function LoadAllPhotos($year){
                                        $StoreDemoPhotosConnector = new StoreDemoPhotos();
 
                                        $Apiresponse = $StoreDemoPhotosConnector->send(new YearFileInfo($year));
+                                       return  json_decode( $Apiresponse->body(),true);
+
+                                });
+
+
+       return $AllImageArray;
+}
+
+
+/**
+     * Retrieve details of all files from StoreDemoPhotos.  Should be cached for use by other calls.
+     * @param $year
+     * @return mixed
+     */
+protected function LoadAllYearInfoPhotos($year){
+
+        $yearKey = $year;
+
+       $PhotosKey = config('services.demophotos.marker') . '-LoadAllYearInfoPhotos-'.$yearKey;
+        if ( $this->forceReload){
+            Cache::store('file')->forget($PhotosKey);
+        }
+
+       $AllImageArray =  Cache::store('file')
+                              ->rememberForever($PhotosKey,
+                                  function () use ($year){
+
+                                       $StoreDemoPhotosConnector = new StoreDemoPhotos();
+
+                                       $Apiresponse = $StoreDemoPhotosConnector->send(new YearInfo($year));
                                        return  json_decode( $Apiresponse->body(),true);
 
                                 });
