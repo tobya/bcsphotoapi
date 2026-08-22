@@ -156,7 +156,7 @@ public function AllGalleryPathURLs(){
   }
 
 
-  private function LoadYearGallery($Year) {
+  protected function LoadYearGallery($Year) {
 
   // Load Gallery Cache for today
   $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . "/galleryjson$Year.json");
@@ -200,6 +200,7 @@ public function AllGalleryPathURLs(){
      * @param $DemoDate
      * @return \Illuminate\Http\JsonResponse
      */
+
   private function LoadGalleryAlbum($AllGallery, $DemoDate) {
 
     $DateofDemo = date('Ymd',strtotime($DemoDate));

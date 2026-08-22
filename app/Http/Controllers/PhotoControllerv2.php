@@ -151,8 +151,56 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
 }
 
+      public function YearGallery(Request $request, $year){
+
+            $Galleries = $this->LoadYearGallery($year);
+
+            $AllGalleries = $Galleries;
+
+            // change items
+            $AllGalleries['items'] = [];
+            foreach ($Galleries['items'] as $key => $gallery) {
+                // do not set dates as key
+                $AllGalleries['items'][] = $this->ConvertAlbumToV5($gallery);
+            }
+
+            $AllGalleries['recent']['mostrecent'] = $this->ConvertAlbumToV5($AllGalleries['recent']['mostrecent']);
+            $AllGalleries['recent']['prevday'] = $this->ConvertAlbumToV5($AllGalleries['recent']['prevday']);
+            $AllGalleries['debug'] = $AllGalleries['Debug'];
+            unset($AllGalleries['Debug']);
+
+            return $this->jsonresponse( $AllGalleries);
+      }
+
+          public function GalleryAlbum(Request $request, $demodate) {
+                $AllGallery = $this->LoadGalleries();
+
+                $DateofDemo = date('Ymd',strtotime($demodate));
+
+             //   return $this->LoadGalleryAlbum($AllGallery, $DateofDemo);
+
+
+    if (isset($AllGallery['allitems'][$DateofDemo])){
+      $GalleryInfo = $this->GetGalleryInfo($DateofDemo);
+
+      $GalleryInfo['Link'] = config('services.demophotos.host') . $GalleryInfo['Link'];
+      $gallery_details = $this->ConvertAlbumToV5($GalleryInfo);
+      $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
+      return $this->jsonresponse(array('status'=>200,
+                                    'gallery' => $gallery_details,
+                                    'images_count' => count($Photos),
+                                    'images' => $Photos ));
+    } else {
+      return $this->jsonresponse(array(
+                    'status'=>404, 'images' => [],
+                    'images_count' => 0 , 'request_time' => date('c'),
+                    'demodate' => $DateofDemo ));
+    }
+
+          }
+
       /**
-       * 
+       * Convert a gallery album to V3/5 and lowercase keys
        * @param array $Gallery
        * @return array
        */
