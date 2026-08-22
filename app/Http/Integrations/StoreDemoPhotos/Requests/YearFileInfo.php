@@ -29,7 +29,7 @@ class YearFileInfo extends Request
                  ->withQueryParameters([
                    'infotype' => 'yearfiles',
                    'year' => $this->year,
-                   'cleanpaths' => 'true',
+                   'cleanpaths' => null,
                 ]);
 
 
