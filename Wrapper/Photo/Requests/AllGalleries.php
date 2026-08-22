@@ -3,13 +3,24 @@
 namespace Bcsapi\V5\Photo\Requests;
 
 use Saloon\Enums\Method;
+
+// for caching
+// if you wish to use this you must composer require saloonphp/cache-plugin "^3.0"
+use Illuminate\Support\Facades\Cache;
 use Saloon\CachePlugin\Traits\HasCaching;
+use Saloon\CachePlugin\Contracts\Driver;
 use Saloon\CachePlugin\Contracts\Cacheable;
+use Saloon\CachePlugin\Drivers\LaravelCacheDriver;
 
 
 class AllGalleries extends \Saloon\Http\Request  // implements Cacheable
 {
-      // to use  caching uncomment lines and methods and some changes xxx
+      // CACHING
+      // to use  caching uncomment lines and methods and some changes
+      // [ ] implements
+      // [ ] methods
+      // [ ] has
+
       // use HasCaching;
 
     /**
