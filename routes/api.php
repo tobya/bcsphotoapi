@@ -40,9 +40,11 @@ Route::Get('/images/random/{year}/{month}/', [photoControllerV2::class, 'Gallery
 Route::Get('/images/random/{year}/{month}/{day}', [photoControllerV2::class, 'GalleryImageRandomDay'])->name('RandomImage');
 
 // years
-Route::Get('/galleries/list/{year}', [photoControllerV2::class,'YearGallery'])->name('GalleryListForYear');
+Route::Get('/galleries/list/{year}', [photoControllerV2::class,'YearGallery']);
 Route::Get('/gallery/list/{year}', [photoControllerV2::class,'YearGallery']);
-Route::Get('/galleries/recent', [photoControllerV2::class,'RecentGallery'])->name('GalleryListForYear');
+Route::Get('/albums/list/{year}', [photoControllerV2::class,'YearGallery'])->name('GalleryListForYear');
+Route::Get('/galleries/recent', [photoControllerV2::class,'RecentGallery']);
+Route::Get('/albums/recent', [photoControllerV2::class,'RecentGallery'])->name('GalleryListForYear');
 
 
 // Get Specific Gallery info for date.
