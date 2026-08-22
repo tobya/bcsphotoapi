@@ -159,30 +159,34 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
             $Galleries = $this->LoadYearGallery($year);
 
-            $AllGalleries = $Galleries;
+            $ResponseGalleries = $Galleries;
 
             // tidy up for v3
-            $AllGalleries['debug'] = $AllGalleries['Debug'];
-            unset($AllGalleries['Debug']);
+            $ResponseGalleries['debug'] = $ResponseGalleries['Debug'];
+            unset($ResponseGalleries['Debug']);
 
-            unset($AllGalleries['recent'] );
+            unset($ResponseGalleries['recent'] );
 
-            if ($AllGalleries['items_count'] > 0){
+            if ($ResponseGalleries['items_count'] > 0){
 
                 // change items
-                $AllGalleries['items'] = [];
+                $ResponseGalleries['albums'] = [];
+                $ResponseGalleries['albums_count'] = $Galleries['items_count'];
+                unset($ResponseGalleries['items']);
+                unset($ResponseGalleries['items_count']);
+
                 foreach ($Galleries['items'] as $key => $gallery) {
                     // do not set dates as key
-                    $AllGalleries['items'][] = $this->ConvertAlbumToV5($gallery);
+                    $ResponseGalleries['albums'][] = $this->ConvertAlbumToV5($gallery);
                 }
 
               //  $AllGalleries['recent']['mostrecent'] = $this->ConvertAlbumToV5($AllGalleries['recent']['mostrecent']);
                // $AllGalleries['recent']['prevday'] = $this->ConvertAlbumToV5($AllGalleries['recent']['prevday']);
             } else {
-                $AllGalleries['status'] = 404;
+                $ResponseGalleries['status'] = 404;
             }
 
-            return $this->jsonresponse( $AllGalleries);
+            return $this->jsonresponse( $ResponseGalleries);
       }
 
           public function GalleryAlbum(Request $request, $demodate) {
