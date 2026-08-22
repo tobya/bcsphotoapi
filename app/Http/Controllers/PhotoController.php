@@ -161,28 +161,28 @@ public function AllGalleryPathURLs(){
   protected function LoadYearGallery($Year) {
 
   // Load Gallery Cache for today
-  $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . "/galleryjson$Year.json");
+//  $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . "/galleryjson$Year.json");
+//
+//  if (file_exists($GalleryFilename) && (!$this->forceReload || $Year <> date('Y') )){
+//
+//    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
+//    $AllGalleries = json_decode($AllAlbumInfo, true);
+//
+//  } else {
 
-  if (file_exists($GalleryFilename) && (!$this->forceReload || $Year <> date('Y') )){
-
-    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
-    $AllGalleries = json_decode($AllAlbumInfo, true);
-
-  } else {
-
-    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=year&year=' . $Year );
-
+    //$AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=year&year=' . $Year );
+    $AllGalleries = $this->LoadAllPhotos($Year);
     // Add cache marker to json that is written to disk but not to returned.
-    $AllGalleries = json_decode($AllAlbumInfo,true);
+   // $AllGalleries = json_decode($AllAlbumInfo,true);
     $AllGalleries['items'] = $AllGalleries['allitems'];
     $AllGalleries['items_count'] = $AllGalleries['allitems_count'];
     unset($AllGalleries['allitems']);
     unset($AllGalleries['allitems_count']);
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
-    $this->saveGalleries($AllGalleries,$GalleryFilename);
+   // $this->saveGalleries($AllGalleries,$GalleryFilename);
     $AllGalleries['source']['source'] = 'fetch';
 
-  }
+ // }
   if ($AllGalleries == NULL){
     // AllGalleries will be NULL if the json file on disk is not valid json.
     // if so delete the file.
@@ -465,7 +465,7 @@ function LoadGalleries(){
   } else {
 
     $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
-
+    dd($AllAlbumInfo);
     // Add cache marker to json that is written to disk but not to returned.
     $AllGalleries = json_decode($AllAlbumInfo,true);
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
@@ -555,7 +555,7 @@ function GetGalleryInfo($GalleryDate ){
 function LoadPhotoGallery($Gallery){
 
     $AllPhotos = $this->LoadAllPhotos(date('Y',strtotime($Gallery['DemoDate'])));
-
+    dd($AllPhotos);
     foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
         if (stripos($GalleryName,$Gallery['FolderName']) !== false){
             // If there was ever a scenario when 2 folders could have the same date, you would need to build up array.

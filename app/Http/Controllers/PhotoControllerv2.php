@@ -2,7 +2,9 @@
 
   namespace App\Http\Controllers;
 
-
+  /**
+   * THIS MUST BE CHANGED TO V3 AS THE OTHER CONTROLLER IS ACTUALLY V2
+   */
 
   use Illuminate\Http\Request;
   use Illuminate\Support\Facades\Log;
@@ -242,34 +244,6 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
             return $this->jsonresponse( $AllGalleries);
        }
 
-
-
-    function AllGalleryPhotos($year = null){
-
-
-      //  $PhotosKey = config('services.demophotos.marker-allimages-'.$year;
-      //  Cache::store('file')->put($PhotosKey,function (){
-//
-      //  })
-//
-       if (file_exists($PhotosFilename) && !$this->forceReload){
-        $json = file_get_contents($PhotosFilename);
-
-      } else {
-           if ($year){
-                $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=yearfiles&year='.$year.'&cleanpaths';
-           } else {
-                $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=files&cleanpaths';
-           }
-
-        $json = file_get_contents($galleryurl);
-
-        if ($json){
-            file_put_contents($PhotosFilename, $json);
-        }
-      }
-      return json_decode( $json,true);
-    }
 
 
 
