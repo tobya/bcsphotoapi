@@ -6,7 +6,7 @@ use Spatie\Url\Url;
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
 
-class AllFileInfo extends Request
+class YearFileInfo extends Request
 {
     /**
      * The HTTP method of the request
@@ -15,7 +15,7 @@ class AllFileInfo extends Request
 
 
     public function __construct(
-        public mixed $year = null
+        public  $year
     )
     {
     }
@@ -25,11 +25,15 @@ class AllFileInfo extends Request
      */
     public function resolveEndpoint(): string
     {
-        $url = Url::fromString('/info_api_v2.php?infotype=files&cleanpaths');
-        if ($this->year) {
-            $url->withQueryParameter('year',$this->year);
-        }
-      //  dd($url);
+        $url = Url::fromString('/info_api_v2.php')
+                 ->withQueryParameters([
+                   'infotype' => 'year',
+                   'year' => $this->year,
+                   'cleanpaths' => 'true',
+                ]);
+
+
+         // dd($url, (string) $url);
         return (string) $url;
     }
 }
