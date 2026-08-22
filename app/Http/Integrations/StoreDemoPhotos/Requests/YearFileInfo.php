@@ -37,3 +37,62 @@ class YearFileInfo extends Request
         return (string) $url;
     }
 }
+
+/**
+ *
+ * {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Generated Schema",
+  "type": "object",
+  "properties": {
+    "files_count": {
+      "type": "integer"
+    },
+    "path_clean": {
+      "type": "boolean"
+    },
+    "cleaned_path": {
+      "type": "string"
+    },
+    "root_path": {
+      "type": "string"
+    },
+    "files": {
+      "type": "object",
+      "properties": {
+        "/2016/12 Week Apr/Week/Fri 10th Jun 2016": {
+          "type": "object",
+          "properties": {
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "info": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "images",
+            "info"
+          ]
+        }
+      },
+      "required": [
+        "/2016/12 Week Apr/Week/Fri 10th Jun 2016"
+      ]
+    }
+  },
+  "required": [
+    "files_count",
+    "path_clean",
+    "cleaned_path",
+    "root_path",
+    "files"
+  ]
+}
+ */
