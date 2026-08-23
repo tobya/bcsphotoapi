@@ -28,7 +28,8 @@ GalleryImageRandom(){
   $RandomImage = $AlbumImages[$RandomImageKey];
 
 
-  return response()->json(['randomimage' => $RandomImage, 'album' =>  $this->ConvertAlbumToV5( $AllGalleries['allitems'][$RandomGalleryKey])]);
+  return response()->json(['randomimage' => $RandomImage,
+      'album' =>  $this->ConvertAlbumToV5( $AllGalleries['allitems'][$RandomGalleryKey])]);
 }
 
 public function GalleryImageRandomYear(Request $request, $Year){
@@ -58,7 +59,10 @@ public function GalleryImageRandomYear(Request $request, $Year){
   $RandomImage = $AlbumImages[$RandomImageKey];
 
 
-  return response()->json(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
+  return $this->jsonresponse([
+        'randomimage' => $RandomImage,
+        'album' => $this->ConvertAlbumToV5($GalleryArray[$RandomGalleryKey])
+  ]);
 
 
 
@@ -100,7 +104,11 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
   $RandomImage = $AlbumImages[$RandomImageKey];
 
-  return $this->jsonresponse(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
+  return $this->jsonresponse([
+      'randomimage' => $RandomImage,
+      'album' => $this->ConvertAlbumToV5($GalleryArray[$RandomGalleryKey])
+
+  ]);
 
 }
 

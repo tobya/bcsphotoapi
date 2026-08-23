@@ -24,8 +24,8 @@ Route::Get('/', function () use ($router) {
     return Response()->json(
         [ 'version' =>
             ['laravel' => app()->version(),
-             'app' => config('app.version'),
-             'api' => '1.0'],
+             'app' => config('version.version'),
+             'api' => config('version.apiv1'),],
            'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos'
              ]);
 });
