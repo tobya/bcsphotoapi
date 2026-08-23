@@ -13,7 +13,8 @@
         "saloonphp/laravel-plugin": "^4.3",
         "spatie/ray": "^1.48",
         "spatie/url": "^2.4",
-        "tobya/bcsapiwrapper": "^4.0"
+        "tobya/bcsapiwrapper": "^4.0",
+        "tobya/laravel-version": "^103.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
