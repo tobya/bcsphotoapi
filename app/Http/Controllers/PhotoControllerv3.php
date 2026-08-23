@@ -11,7 +11,7 @@
   use Illuminate\Support\Facades\Cache;
   use App\Http\Responses\PhotoApiResponseV5;
 
-  class PhotoControllerv2 extends PhotoController
+  class PhotoControllerv3 extends PhotoController
   {
 
 // Returns 1 random image from one random gallery.

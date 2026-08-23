@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Http\Controllers\PhotoController;
 use App\Http\Responses\PhotoApiResponseV5;
-use App\Http\Controllers\PhotoControllerv2;
+use App\Http\Controllers\PhotoControllerv3;
 use Illuminate\Contracts\Routing\ResponseFactory;
 
 class AppServiceProvider extends ServiceProvider
