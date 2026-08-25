@@ -25,7 +25,7 @@ Route::Get('/', function ()  {
             ['laravel' => app()->version(),
              'app' => config('version.version'),
              'api' => config('version.apiv3'),],
-             'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos. Version 2.0'
+             'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos. Version 3.0'
              ]);
 });
 
