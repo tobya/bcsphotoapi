@@ -66,5 +66,5 @@ Route::Get('/gallery/{demodate}/html/{template}', [templateController::class,'HT
 
 
 
-Route::Get('/purgecache/', [photoController::class, 'PurgeCache'])->name('PurgeCache');
+Route::Get('/purgecache/', [photoController::class, 'PurgeCache']);
 
