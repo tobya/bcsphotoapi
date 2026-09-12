@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'version' => '2.9.0',
+    'version' => '2.9.1',
     'apiv1' => '1.1',
     'apiv2' => '2.0',
     'apiv3' => '3.0rc',
