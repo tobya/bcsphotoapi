@@ -23,12 +23,14 @@
      */
     public function toResponse($request,)
     {
-        if(isset($this->data['api'])){
-            $this->data['api']['version'] = '3.0';
-        } else {
+        if(!isset($this->data['api'])){
 
-        $this->data['api'] = ['version' => '3.0'];
+            $this->data['api'] = [];
         }
+
+        $this->data['api']['version'] = config('version.apiv3');
+
+        $this->data['api']['app_version'] = config('version.version');
 
       return new JsonResponse(
           $this->data,

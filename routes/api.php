@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\photoControllerV2;
+use App\Http\Controllers\PhotoControllerv3;
 use App\Http\Controllers\TemplateController;
 
 /*
@@ -19,13 +19,13 @@ use App\Http\Controllers\TemplateController;
 
 
 
-Route::Get('/', function () use ($router) {
+Route::Get('/', function ()  {
     return Response()->json(
         [ 'version' =>
             ['laravel' => app()->version(),
-             'app' => config('app.version'),
-             'api' => '2.0'],
-           'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos. Version 2.0'
+             'app' => config('version.version'),
+             'api' => config('version.apiv3'),],
+             'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos. Version 3.0'
              ]);
 });
 
@@ -34,21 +34,23 @@ Route::Get('/', function () use ($router) {
 */
 
 // Get Random Image
-Route::Get('/images/random/', [photoControllerV2::class, 'GalleryImageRandom']);
-Route::Get('/images/random/{year}/', [photoControllerV2::class, 'GalleryImageRandomYear']);
-Route::Get('/images/random/{year}/{month}/', [photoControllerV2::class, 'GalleryImageRandomMonth']);
-Route::Get('/images/random/{year}/{month}/{day}', [photoControllerV2::class, 'GalleryImageRandomDay'])->name('RandomImage');
+Route::Get('/images/random/', [PhotoControllerv3::class, 'GalleryImageRandom']);
+Route::Get('/images/random/{year}/', [PhotoControllerv3::class, 'GalleryImageRandomYear']);
+Route::Get('/images/random/{year}/{month}/', [PhotoControllerv3::class, 'GalleryImageRandomMonth']);
+Route::Get('/images/random/{year}/{month}/{day}', [PhotoControllerv3::class, 'GalleryImageRandomDay'])->name('RandomImage');
 
 // years
-Route::Get('/galleries/list/{year}', [photoControllerV2::class,'YearGallery'])->name('GalleryListForYear');
-Route::Get('/gallery/list/{year}', [photoControllerV2::class,'YearGallery']);
-Route::Get('/galleries/recent', [photoControllerV2::class,'RecentGallery'])->name('GalleryListForYear');
+Route::Get('/galleries/list/{year}', [PhotoControllerv3::class,'YearGallery']);
+Route::Get('/gallery/list/{year}', [PhotoControllerv3::class,'YearGallery'])->name('GalleryListForYear');
+Route::Get('/albums/list/{year}', [PhotoControllerv3::class,'YearGallery'])->name('AlbumListForYear');
+Route::Get('/galleries/recent', [PhotoControllerv3::class,'RecentGallery']);
+Route::Get('/albums/recent', [PhotoControllerv3::class,'RecentGallery'])->name('RecentAlbum');
 
 
 // Get Specific Gallery info for date.
-Route::Get('/gallery/{demodate}', [photoControllerV2::class, 'GalleryAlbum'])->name('DemoGallery');
+Route::Get('/gallery/{demodate}', [PhotoControllerv3::class, 'GalleryAlbum'])->name('DemoGallery');
 
 
 
-Route::Get('/purgecache/', [photoControllerV2::class, 'PurgeCache'])->name('PurgeCache');
+Route::Get('/purgecache/', [PhotoControllerv3::class, 'PurgeCache'])->name('PurgeCache');
 

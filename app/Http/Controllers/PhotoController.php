@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Http\Request;
-
+use App\Http\Integrations\StoreDemoPhotos\StoreDemoPhotos;
+use App\Http\Integrations\StoreDemoPhotos\Requests\YearInfo;
+use App\Http\Integrations\StoreDemoPhotos\Requests\InfoTypeAll;
+use App\Http\Integrations\StoreDemoPhotos\Requests\YearFileInfo;
+use App\Http\Integrations\StoreDemoPhotos\Requests\InfoTypeAllYears;
 
 
 class PhotoController extends Controller
@@ -91,7 +96,7 @@ public function AllGalleryPathURLs(){
           $pathids = $DBRecipes['dbrecipepathids'][$key] ;
          }  else {
 
-         $pathids = $this->getPathIDs_FromRecipeDBList($dbpath);
+         $pathids = $this-> getPathIDs_FromRecipeDBList($dbpath);
          }
 
          foreach ($pathids as  $Path) {
@@ -125,9 +130,7 @@ public function AllGalleryPathURLs(){
       return response()->json($GalleryInfo);
   }
 
-  public function YearPhotoInfo(Request $request, $year) {
-        abort(501);
-  }
+
 
   public function YearGallery(Request $request, $year){
         $AllGallery = $this->LoadYearGallery($year);
@@ -159,28 +162,28 @@ public function AllGalleryPathURLs(){
   protected function LoadYearGallery($Year) {
 
   // Load Gallery Cache for today
-  $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . "/galleryjson$Year.json");
+//  $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . "/galleryjson$Year.json");
+//
+//  if (file_exists($GalleryFilename) && (!$this->forceReload || $Year <> date('Y') )){
+//
+//    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
+//    $AllGalleries = json_decode($AllAlbumInfo, true);
+//
+//  } else {
 
-  if (file_exists($GalleryFilename) && (!$this->forceReload || $Year <> date('Y') )){
-
-    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
-    $AllGalleries = json_decode($AllAlbumInfo, true);
-
-  } else {
-
-    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=year&year=' . $Year );
-
+    //$AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=year&year=' . $Year );
+    $AllGalleries = $this->LoadAllYearInfoPhotos($Year);
     // Add cache marker to json that is written to disk but not to returned.
-    $AllGalleries = json_decode($AllAlbumInfo,true);
+   // $AllGalleries = json_decode($AllAlbumInfo,true);
     $AllGalleries['items'] = $AllGalleries['allitems'];
     $AllGalleries['items_count'] = $AllGalleries['allitems_count'];
     unset($AllGalleries['allitems']);
     unset($AllGalleries['allitems_count']);
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
-    $this->saveGalleries($AllGalleries,$GalleryFilename);
+   // $this->saveGalleries($AllGalleries,$GalleryFilename);
     $AllGalleries['source']['source'] = 'fetch';
 
-  }
+ // }
   if ($AllGalleries == NULL){
     // AllGalleries will be NULL if the json file on disk is not valid json.
     // if so delete the file.
@@ -210,7 +213,7 @@ public function AllGalleryPathURLs(){
       $GalleryInfo['Link'] = config('services.demophotos.host') . $GalleryInfo['Link'];
       $Photos = $this->getGalleryPhotos($AllGallery['allitems'][$DateofDemo]);
       return response()->json(array('status'=>200,
-                                    'api' => ['version' => config('app.version')],
+                                    'api' => ['version' => config('version.apiv1')],
                                     'gallery' => $GalleryInfo,
                                     'images_count' => count($Photos),
                                     'images' => $Photos ));
@@ -263,6 +266,7 @@ public function AllGalleryPathURLs(){
     }
 
     $FilesAfter = glob(  storage_path('app/data/' . config('services.demophotos.marker') . '/*.*'));
+    Cache::clear();
     return response()->json(['filestopurge' => $FilesToDelete, 'filesremain' => $FilesAfter, 'status' => 200]);
   }
 
@@ -340,7 +344,7 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
     $ChosenGallery = $GalleryArray[$RandomGalleryKey];
     // Sometime Datetime is false if Folder isnt a date, check.
-    if ($ChosenGallery['DTFolder'] != false){
+    if ($ChosenGallery['DemoDate'] != false){
         $AlbumImages = $this->getGalleryPhotos( $GalleryArray[$RandomGalleryKey]);
     } else {
         //recurse
@@ -435,13 +439,16 @@ function LoadRecentGalleries(){
   $GalleryFilename =  storage_path('app/data/' . config('services.demophotos.marker') . '/recentgalleryjson-' . date("Ymd") . '.json');
 
   if (file_exists($GalleryFilename) && !$this->forceReload){
-    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
+    $AllAlbumInfoJSON = file_get_contents($GalleryFilename) ;
+    $AllGalleries =  json_decode($AllAlbumInfoJSON, true);
   } else {
-    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=all');
-    file_put_contents($GalleryFilename, $AllAlbumInfo);
+      $StoreDemoPhotoApi = new StoreDemoPhotos();
+      $AllAlbumInfo = $StoreDemoPhotoApi->send(new InfoTypeAll());
+      $AllGalleries = $AllAlbumInfo->array();
+      file_put_contents($GalleryFilename, $AllAlbumInfo->body());
   }
 
-  $AllGalleries = json_decode($AllAlbumInfo, true);
+
   if ($AllGalleries == NULL){
     unlink($GalleryFilename);
   } else {
@@ -452,6 +459,7 @@ function LoadRecentGalleries(){
 
 function LoadGalleries(){
 
+    //  dd('die');
   // Load Gallery Cache for today
   $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
 
@@ -462,10 +470,14 @@ function LoadGalleries(){
 
   } else {
 
-    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
-
+    //$AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
+    $StoredPhotosApi = new StoreDemoPhotos();
+    $AllAlbumInfo = $StoredPhotosApi->send(new InfoTypeAllYears());
+    //dd($AllAlbumInfo);
     // Add cache marker to json that is written to disk but not to returned.
-    $AllGalleries = json_decode($AllAlbumInfo,true);
+    //$AllGalleries = json_decode($AllAlbumInfo,true);
+      Ray('running galleries');
+    $AllGalleries = $AllAlbumInfo->array();
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
     $this->saveGalleries($AllGalleries,$GalleryFilename);
     $AllGalleries['source']['source'] = 'fetch';
@@ -552,8 +564,8 @@ function GetGalleryInfo($GalleryDate ){
      */
 function LoadPhotoGallery($Gallery){
 
-    $AllPhotos = $this->LoadAllPhotos(date('Y',$Gallery['DTFolder']));
-
+    $AllPhotos = $this->LoadAllYearCleanFilePhotos(date('Y',strtotime($Gallery['DemoDate'])));
+   // dd($AllPhotos);
     foreach ($AllPhotos['files'] as $GalleryName => $GalleryFiles ){
         if (stripos($GalleryName,$Gallery['FolderName']) !== false){
             // If there was ever a scenario when 2 folders could have the same date, you would need to build up array.
@@ -607,26 +619,63 @@ function GetGalleryPhotos($Gallery){
   return $imgs;
 }
 
-protected function LoadAllPhotos($year = null){
+    /**
+     * Retrieve details of all files from StoreDemoPhotos.  Should be cached for use by other calls.
+     * @param $year
+     * @return mixed
+     */
+protected function LoadAllYearCleanFilePhotos($year){
 
-    $PhotosFilename =storage_path('app/data/' . config('services.demophotos.marker') . '/allimages'.$year.'.json');
-   if (file_exists($PhotosFilename) && !$this->forceReload){
-    $json = file_get_contents($PhotosFilename);
+        $yearKey = $year;
 
-  } else {
-       if ($year){
-            $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=yearfiles&year='.$year.'&cleanpaths';
-       } else {
-            $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=files&cleanpaths';
-       }
+       $PhotosKey = config('services.demophotos.marker') . '-LoadAllYearCleanFilePhotos-'.$yearKey;
+        if ( $this->forceReload){
+            Cache::store('file')->forget($PhotosKey);
+        }
 
-    $json = file_get_contents($galleryurl);
+       $AllImageArray =  Cache::store('file')
+                              ->rememberForever($PhotosKey,
+                                  function () use ($year){
 
-    if ($json){
-        file_put_contents($PhotosFilename, $json);
-    }
-  }
-  return json_decode( $json,true);
+                                       $StoreDemoPhotosConnector = new StoreDemoPhotos();
+
+                                       $Apiresponse = $StoreDemoPhotosConnector->send(new YearFileInfo($year));
+                                       return  json_decode( $Apiresponse->body(),true);
+
+                                });
+
+
+       return $AllImageArray;
+}
+
+
+/**
+     * Retrieve details of all files from StoreDemoPhotos.  Should be cached for use by other calls.
+     * @param $year
+     * @return mixed
+     */
+protected function LoadAllYearInfoPhotos($year){
+
+        $yearKey = $year;
+
+       $PhotosKey = config('services.demophotos.marker') . '-LoadAllYearInfoPhotos-'.$yearKey;
+        if ( $this->forceReload){
+            Cache::store('file')->forget($PhotosKey);
+        }
+
+       $AllImageArray =  Cache::store('file')
+                              ->rememberForever($PhotosKey,
+                                  function () use ($year){
+
+                                       $StoreDemoPhotosConnector = new StoreDemoPhotos();
+
+                                       $Apiresponse = $StoreDemoPhotosConnector->send(new YearInfo($year));
+                                       return  json_decode( $Apiresponse->body(),true);
+
+                                });
+
+
+       return $AllImageArray;
 }
 
 
@@ -736,7 +785,7 @@ function getRecipeDBListPathFromZenPath($ZenLink){
 
   function getPathIDs_FromRecipeDBList($RecipeLink){
     $url = 'https://recipeapi.cookingisfun.ie/7e1974d12f8f41db919b935290bffdba/lists/bypath/' . urlencode($RecipeLink);
-
+    dd($url);
     $raw = file_get_contents($url);
     $Details = json_decode($raw,true);
     //print_r($Details);

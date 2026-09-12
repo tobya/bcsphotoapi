@@ -2,13 +2,16 @@
 
   namespace App\Http\Controllers;
 
-
+  /**
+   * THIS MUST BE CHANGED TO V3 AS THE OTHER CONTROLLER IS ACTUALLY V2
+   */
 
   use Illuminate\Http\Request;
+  use Illuminate\Support\Facades\Log;
   use Illuminate\Support\Facades\Cache;
   use App\Http\Responses\PhotoApiResponseV5;
 
-  class PhotoControllerv2 extends PhotoController
+  class PhotoControllerv3 extends PhotoController
   {
 
 // Returns 1 random image from one random gallery.
@@ -25,7 +28,8 @@ GalleryImageRandom(){
   $RandomImage = $AlbumImages[$RandomImageKey];
 
 
-  return response()->json(['randomimage' => $RandomImage, 'album' =>  $this->ConvertAlbumToV5( $AllGalleries['allitems'][$RandomGalleryKey])]);
+  return response()->json(['randomimage' => $RandomImage,
+      'album' =>  $this->ConvertAlbumToV5( $AllGalleries['allitems'][$RandomGalleryKey])]);
 }
 
 public function GalleryImageRandomYear(Request $request, $Year){
@@ -55,7 +59,10 @@ public function GalleryImageRandomYear(Request $request, $Year){
   $RandomImage = $AlbumImages[$RandomImageKey];
 
 
-  return response()->json(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
+  return $this->jsonresponse([
+        'randomimage' => $RandomImage,
+        'album' => $this->ConvertAlbumToV5($GalleryArray[$RandomGalleryKey])
+  ]);
 
 
 
@@ -85,7 +92,7 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
     $ChosenGallery = $GalleryArray[$RandomGalleryKey];
     // Sometime Datetime is false if Folder isnt a date, check.
-    if ($ChosenGallery['DTFolder'] != false){
+    if ($ChosenGallery['DemoDate'] != false){
         $AlbumImages = $this->getGalleryPhotos( $GalleryArray[$RandomGalleryKey]);
     } else {
         //recurse
@@ -97,7 +104,11 @@ public function GalleryImageRandomMonth(Request $request, $Year, $Month){
 
   $RandomImage = $AlbumImages[$RandomImageKey];
 
-  return $this->jsonresponse(['randomimage' => $RandomImage, 'album' => $GalleryArray[$RandomGalleryKey]]);
+  return $this->jsonresponse([
+      'randomimage' => $RandomImage,
+      'album' => $this->ConvertAlbumToV5($GalleryArray[$RandomGalleryKey])
+
+  ]);
 
 }
 
@@ -156,30 +167,34 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
 
             $Galleries = $this->LoadYearGallery($year);
 
-            $AllGalleries = $Galleries;
+            $ResponseGalleries = $Galleries;
 
             // tidy up for v3
-            $AllGalleries['debug'] = $AllGalleries['Debug'];
-            unset($AllGalleries['Debug']);
+            $ResponseGalleries['debug'] = $ResponseGalleries['Debug'];
+            unset($ResponseGalleries['Debug']);
 
-            unset($AllGalleries['recent'] );
+            unset($ResponseGalleries['recent'] );
 
-            if ($AllGalleries['items_count'] > 0){
+            if ($ResponseGalleries['items_count'] > 0){
 
                 // change items
-                $AllGalleries['items'] = [];
+                $ResponseGalleries['albums'] = [];
+                $ResponseGalleries['albums_count'] = $Galleries['items_count'];
+                unset($ResponseGalleries['items']);
+                unset($ResponseGalleries['items_count']);
+
                 foreach ($Galleries['items'] as $key => $gallery) {
                     // do not set dates as key
-                    $AllGalleries['items'][] = $this->ConvertAlbumToV5($gallery);
+                    $ResponseGalleries['albums'][] = $this->ConvertAlbumToV5($gallery);
                 }
 
               //  $AllGalleries['recent']['mostrecent'] = $this->ConvertAlbumToV5($AllGalleries['recent']['mostrecent']);
                // $AllGalleries['recent']['prevday'] = $this->ConvertAlbumToV5($AllGalleries['recent']['prevday']);
             } else {
-                $AllGalleries['status'] = 404;
+                $ResponseGalleries['status'] = 404;
             }
 
-            return $this->jsonresponse( $AllGalleries);
+            return $this->jsonresponse( $ResponseGalleries);
       }
 
           public function GalleryAlbum(Request $request, $demodate) {
@@ -241,34 +256,6 @@ public function GalleryImageRandomDay(Request $request, $Year, $Month, $Day){
             return $this->jsonresponse( $AllGalleries);
        }
 
-
-
-    function AllGalleryPhotos($year = null){
-
-
-      //  $PhotosKey = config('services.demophotos.marker-allimages-'.$year;
-      //  Cache::store('file')->put($PhotosKey,function (){
-//
-      //  })
-//
-       if (file_exists($PhotosFilename) && !$this->forceReload){
-        $json = file_get_contents($PhotosFilename);
-
-      } else {
-           if ($year){
-                $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=yearfiles&year='.$year.'&cleanpaths';
-           } else {
-                $galleryurl =   config('services.demophotos.host') .  '/info_api_v2.php?infotype=files&cleanpaths';
-           }
-
-        $json = file_get_contents($galleryurl);
-
-        if ($json){
-            file_put_contents($PhotosFilename, $json);
-        }
-      }
-      return json_decode( $json,true);
-    }
 
 
 

@@ -24,8 +24,8 @@ Route::Get('/', function () use ($router) {
     return Response()->json(
         [ 'version' =>
             ['laravel' => app()->version(),
-             'app' => config('app.version'),
-             'api' => '1.0'],
+             'app' => config('version.version'),
+             'api' => config('version.apiv1'),],
            'message' => 'PhotoApi Details for Ballymaloe Cookery School Demonstration Photos'
              ]);
 });
@@ -35,8 +35,6 @@ Route::Get('/', function () use ($router) {
 */
 Route::Get('/all', [photoController::class, 'AllGalleryInfo_ConvertDBPath'])->name('AllGalleries');
 
-// deprecated
-Route::Get('/all/{year}', [photoController::class, 'YearPhotoInfo']);
 
 Route::Get('/allconvertzen', [photoController::class, 'AllGalleryInfo_ConvertDBPath']);
 Route::Get('/allloadrecipepaths', [photoController::class, 'AllGalleryInfo_IncludingPathIDs']);

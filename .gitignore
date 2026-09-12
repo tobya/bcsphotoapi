@@ -20,4 +20,5 @@ yarn-error.log
 *.log
 filelog2.txt
 *.bak
+work-with-composer.json
 

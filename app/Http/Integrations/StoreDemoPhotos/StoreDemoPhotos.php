@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Integrations\Photo;
+namespace App\Http\Integrations\StoreDemoPhotos;
 
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 
-class PhotoConnector extends Connector
+class StoreDemoPhotos extends Connector
 {
     use AcceptsJson;
 
@@ -14,7 +14,7 @@ class PhotoConnector extends Connector
      */
     public function resolveBaseUrl(): string
     {
-        return '';
+        return   config('services.demophotos.host') ;
     }
 
     /**

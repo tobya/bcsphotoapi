@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2.0|^8.3",
@@ -12,15 +15,19 @@
         "laravel/tinker": "^2.7",
         "saloonphp/laravel-plugin": "^4.3",
         "spatie/ray": "^1.48",
+        "spatie/url": "^2.4",
         "tobya/bcsapiwrapper": "^4.0",
-        "tobya/saloonforge": "*"
+        "tobya/laravel-version": "^103.2"
     },
     "require-dev": {
+        "tobya/work-with-composer": "^0.5.0",
+        "tobya/saloonforge": "0.1",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
         "phpunit/phpunit": "^11.0"
+
     },
     "autoload": {
         "psr-4": {
@@ -28,21 +35,10 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
-    },    "autoload_dev": {
-        "psr-4": {
-
-            "Bcsapi\\V5\\": "Wrapper/"
-
-        }
     },
-  "repositories": {
-
-      "tobya/saloonforge": {
-            "type": "path",
-            "url": "C:\\Development\\github\\packages\\saloon\\saloonforge",
-            "options": {
-                "symlink": true
-            }
+    "autoload_dev": {
+        "psr-4": {
+            "Bcsapi\\V5\\": "Wrapper/"
         }
     },
     "autoload-dev": {
@@ -77,4 +73,6 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true
+
+
 }
