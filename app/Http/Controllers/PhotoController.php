@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Http\Integrations\StoreDemoPhotos\StoreDemoPhotos;
 use App\Http\Integrations\StoreDemoPhotos\Requests\YearInfo;
+use App\Http\Integrations\StoreDemoPhotos\Requests\InfoTypeAll;
 use App\Http\Integrations\StoreDemoPhotos\Requests\YearFileInfo;
+use App\Http\Integrations\StoreDemoPhotos\Requests\InfoTypeAllYears;
 
 
 class PhotoController extends Controller
@@ -437,13 +439,16 @@ function LoadRecentGalleries(){
   $GalleryFilename =  storage_path('app/data/' . config('services.demophotos.marker') . '/recentgalleryjson-' . date("Ymd") . '.json');
 
   if (file_exists($GalleryFilename) && !$this->forceReload){
-    $AllAlbumInfo = file_get_contents($GalleryFilename) ;
+    $AllAlbumInfoJSON = file_get_contents($GalleryFilename) ;
+    $AllGalleries =  json_decode($AllAlbumInfoJSON, true);
   } else {
-    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=all');
-    file_put_contents($GalleryFilename, $AllAlbumInfo);
+      $StoreDemoPhotoApi = new StoreDemoPhotos();
+      $AllAlbumInfo = $StoreDemoPhotoApi->send(new InfoTypeAll());
+      $AllGalleries = $AllAlbumInfo->array();
+      file_put_contents($GalleryFilename, $AllAlbumInfo->body());
   }
 
-  $AllGalleries = json_decode($AllAlbumInfo, true);
+
   if ($AllGalleries == NULL){
     unlink($GalleryFilename);
   } else {
@@ -454,6 +459,7 @@ function LoadRecentGalleries(){
 
 function LoadGalleries(){
 
+    //  dd('die');
   // Load Gallery Cache for today
   $GalleryFilename =   storage_path('app/data/' . config('services.demophotos.marker') . '/allarchivegalleryjson_'  . date('Ymd')  .".json");
 
@@ -464,10 +470,14 @@ function LoadGalleries(){
 
   } else {
 
-    $AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
+    //$AllAlbumInfo =  file_get_contents(config('services.demophotos.host') . '/info_api_v2.php?infotype=allyears');
+    $StoredPhotosApi = new StoreDemoPhotos();
+    $AllAlbumInfo = $StoredPhotosApi->send(new InfoTypeAllYears());
     //dd($AllAlbumInfo);
     // Add cache marker to json that is written to disk but not to returned.
-    $AllGalleries = json_decode($AllAlbumInfo,true);
+    //$AllGalleries = json_decode($AllAlbumInfo,true);
+      Ray('running galleries');
+    $AllGalleries = $AllAlbumInfo->array();
     $AllGalleries['source'] = ['source' => 'diskcache', 'retrievaldate' => date('c')];
     $this->saveGalleries($AllGalleries,$GalleryFilename);
     $AllGalleries['source']['source'] = 'fetch';
