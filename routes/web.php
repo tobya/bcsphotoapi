@@ -45,14 +45,14 @@ Route::Get('/gallerypathurls', [photoController::class, 'AllGalleryPathURLs']);
 Route::Get('/images/random/', [photoController::class, 'GalleryImageRandom']);
 Route::Get('/images/random/{year}/', [photoController::class, 'GalleryImageRandomYear']);
 Route::Get('/images/random/{year}/{month}/', [photoController::class, 'GalleryImageRandomMonth']);
-Route::Get('/images/random/{year}/{month}/{day}', [photoController::class, 'GalleryImageRandomDay'])->name('RandomImage');
+Route::Get('/images/random/{year}/{month}/{day}', [photoController::class, 'GalleryImageRandomDay']);
 
 // years
 Route::Get('/galleries/list/{year}', [photoController::class,'YearGallery'])->name('GalleryListForYear');
 
 // Get Specific Gallery info for date.
 Route::Get('/gallery/{demodate}', [photoController::class, 'GalleryAlbum'])->name('DemoGallery');
-Route::Get('/gallery/{demodate}/nocache', [photoController::class, 'GalleryAlbum_noCache'])->name('DemoGallery_Uncached');
+Route::Get('/gallery/{demodate}/nocache', [photoController::class, 'GalleryAlbum_noCache']);
 
 
 // Return Gallery as basic HTML rather than JSON
