@@ -3,7 +3,7 @@
 // config for Tobya/SaloonForge
 return [
     'integrations' => [
-        'Photos2' => [
+        'Photo' => [
             'routes' => [
 
           //  'selector_class' => \App\Http\Integrations\PhotoApiRouteSelector::class,
@@ -15,6 +15,7 @@ return [
                   'middleware'  =>  ['web'],
                  'filter'       =>  ['somenonese*'],
                  'unnamed' => true,
+
                 ],
 
             'include' =>
@@ -32,7 +33,20 @@ return [
               'copy' => [
                   'active' => true,
                   'destination' => 'C:\\Development\\github\\packages\\bcsapi\\bcsapiwrapper\\src\\V5\\Photo\\',
-              ]
+
+                  // these files should not be copied, this can be helpful when the file has substantial
+                  // changes from the generated file and thus avoids git diff discarding.
+                  'except' =>
+                      [
+                      'files' => [
+                        'DemoGallery.php',
+                        'RandomImage.php',
+                          'PurgeCache.php',
+                      ]
+                  ]
+              ],
+
+
           ]
         ]
 ]
