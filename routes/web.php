@@ -33,7 +33,7 @@ Route::Get('/', function () use ($router) {
 /*
   Get All Galleries or all Galleries for specific Year.
 */
-Route::Get('/all', [photoController::class, 'AllGalleryInfo_ConvertDBPath'])->name('AllGalleries');
+Route::Get('/all', [photoController::class, 'AllGalleryInfo_ConvertDBPath']);
 
 
 Route::Get('/allconvertzen', [photoController::class, 'AllGalleryInfo_ConvertDBPath']);
@@ -48,10 +48,10 @@ Route::Get('/images/random/{year}/{month}/', [photoController::class, 'GalleryIm
 Route::Get('/images/random/{year}/{month}/{day}', [photoController::class, 'GalleryImageRandomDay']);
 
 // years
-Route::Get('/galleries/list/{year}', [photoController::class,'YearGallery'])->name('GalleryListForYear');
+Route::Get('/galleries/list/{year}', [photoController::class,'YearGallery']);
 
 // Get Specific Gallery info for date.
-Route::Get('/gallery/{demodate}', [photoController::class, 'GalleryAlbum'])->name('DemoGallery');
+Route::Get('/gallery/{demodate}', [photoController::class, 'GalleryAlbum']);
 Route::Get('/gallery/{demodate}/nocache', [photoController::class, 'GalleryAlbum_noCache']);
 
 
