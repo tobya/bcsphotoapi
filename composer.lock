@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62c1c0082a90213b12e69545a593c9cf",
+    "content-hash": "3509bd109ca13ebf295a29426990c874",
     "packages": [
         {
             "name": "brick/math",
@@ -9016,16 +9016,16 @@
         },
         {
             "name": "tobya/saloonforge",
-            "version": "0.1",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tobya/SaloonForge.git",
-                "reference": "8e3cc5cf87326cf1e85d01f27753ee3696f1f73c"
+                "reference": "cd04f67ad20c6b3adb11bfaad5ff886ade8763a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tobya/SaloonForge/zipball/8e3cc5cf87326cf1e85d01f27753ee3696f1f73c",
-                "reference": "8e3cc5cf87326cf1e85d01f27753ee3696f1f73c",
+                "url": "https://api.github.com/repos/tobya/SaloonForge/zipball/cd04f67ad20c6b3adb11bfaad5ff886ade8763a0",
+                "reference": "cd04f67ad20c6b3adb11bfaad5ff886ade8763a0",
                 "shasum": ""
             },
             "require": {
@@ -9080,7 +9080,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tobya/SaloonForge/issues",
-                "source": "https://github.com/tobya/SaloonForge/tree/0.1"
+                "source": "https://github.com/tobya/SaloonForge/tree/0.2"
             },
             "funding": [
                 {
@@ -9088,7 +9088,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-22T16:57:52+00:00"
+            "time": "2026-09-12T12:26:34+00:00"
         },
         {
             "name": "tobya/work-with-composer",
