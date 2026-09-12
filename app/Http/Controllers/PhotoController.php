@@ -784,7 +784,7 @@ function getRecipeDBListPathFromZenPath($ZenLink){
 
 
   function getPathIDs_FromRecipeDBList($RecipeLink){
-    $url = 'https://recipeapi.cookingisfun.ie/7e1974d12f8f41db919b935290bffdba/lists/bypath/' . urlencode($RecipeLink);
+    $url = 'https://recipeapi.cookingisfun.ie/806bb574f79340cf96f97d0fcfa73357/lists/bypath/' . urlencode($RecipeLink);
    // dd($url);
     $raw = file_get_contents($url);
     $Details = json_decode($raw,true);
