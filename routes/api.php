@@ -15,6 +15,7 @@ use App\Http\Controllers\TemplateController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 | prefix : api/v2/
+actuallly I think prefix is api/v3
 */
 
 

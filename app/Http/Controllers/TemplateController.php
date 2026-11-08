@@ -13,6 +13,11 @@ use App\Http\Controllers\PhotoController;
 class TemplateController extends Controller
 {
 
+    /**
+     * Return list of all templates available
+     * @param $demodate
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
 public function index($demodate)
 {
     $storage = Storage::build([
